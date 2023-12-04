@@ -30,4 +30,24 @@ const (
 	CodeTooManyRequest
 	CodeMarshal
 	CodeUnmarshal
+	// Other codes
+)
+
+// SQL error codes (2001-3000)
+const (
+	CodeSQL = Code(iota + 2001)
+	CodeSQLInit
+	CodeSQLBuilder
+	CodeSQLTxBegin
+	CodeSQLTxCommit
+	CodeSQLTxRollback
+	CodeSQLTxExec
+	CodeSQLPrepareStmt
+	CodeSQLRead
+	CodeSQLRowScan
+	CodeSQLRecordDoesNotExist
+	CodeSQLUniqueConstraint
+	CodeSQLConflict
+	CodeSQLNoRowsAffected
+	// Other codes
 )
