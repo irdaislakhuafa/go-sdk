@@ -53,3 +53,42 @@ func Test_IsExist(t *testing.T) {
 		})
 	}
 }
+
+func Test_GetFileExtenstion(t *testing.T) {
+	type test struct {
+		name       string
+		arg        string
+		wantResult string
+	}
+	tests := []test{
+		{
+			name:       "test file csv",
+			arg:        "file.csv",
+			wantResult: "csv",
+		},
+		{
+			name:       "test file csv with path",
+			arg:        "/path/to/file.csv",
+			wantResult: "csv",
+		},
+		{
+			name:       "test file without extension",
+			arg:        "file",
+			wantResult: "",
+		},
+		{
+			name:       "test file without extension with path",
+			arg:        "/path/to/file",
+			wantResult: "",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := GetFileExtenstion(tt.arg)
+			if result != tt.wantResult {
+				t.Fatalf("error: want result is '%v' but got '%v'", tt.wantResult, result)
+			}
+		})
+	}
+}

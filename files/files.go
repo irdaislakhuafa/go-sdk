@@ -1,6 +1,10 @@
 package files
 
-import "os"
+import (
+	"os"
+	"path/filepath"
+	"strings"
+)
 
 // to check is file (not dir) exists, will return true if exist ant return false if not file (dir) or not exist
 func IsExist(pathToFile string) bool {
@@ -12,4 +16,17 @@ func IsExist(pathToFile string) bool {
 	}
 
 	return !fileInfo.IsDir()
+}
+
+// get file extension (ex. "txt, csv, docs, json, yaml")
+func GetFileExtenstion(pathOrFileName string) string {
+	fileName := filepath.Base(pathOrFileName)
+	splitedName := strings.Split(fileName, ".")
+
+	if len(splitedName) <= 1 {
+		return ""
+	}
+
+	fileExt := splitedName[len(splitedName)-1]
+	return fileExt
 }
