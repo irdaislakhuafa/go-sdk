@@ -51,3 +51,13 @@ const (
 	CodeSQLNoRowsAffected
 	// Other codes
 )
+
+// Client error codes (3001-4000)
+const (
+	CodeClient = Code(iota + 3001)
+	CodeClientMarshal
+	CodeClientUnmarshal
+	CodeClientErrorOnRequest
+	CodeClientErrorOnReadBody
+	// Other codes
+)
