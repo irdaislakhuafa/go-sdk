@@ -104,3 +104,11 @@ const (
 	CodeJWTSignedStringError
 	// Other codes
 )
+
+// GraphQL errors (8001-9000)
+const (
+	CodeGQL = Code(iota + 8001)
+	CodeGQLInvalidValue
+	CodeGQLBuilder
+	// Other codes
+)
