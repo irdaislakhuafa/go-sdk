@@ -94,3 +94,13 @@ const (
 	CodeStorageNoClient
 	// Other codes
 )
+
+// JWT error codes (7001-8000)
+const (
+	CodeJWT = Code(iota + 7001)
+	CodeJWTInvalidMethod
+	CodeJWTParseWithClaimsError
+	CodeJWTInvalidClaimsType
+	CodeJWTSignedStringError
+	// Other codes
+)
