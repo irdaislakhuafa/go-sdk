@@ -53,7 +53,6 @@ func Init(cfg Config) Interface {
 	return &logger{log: zerologger}
 }
 
-// TODO: added method Debugf
 func (l *logger) Trace(ctx context.Context, obj interface{}) {
 	panic("not implemented") // TODO: Implement
 }
