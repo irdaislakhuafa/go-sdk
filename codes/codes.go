@@ -70,4 +70,18 @@ const (
 	CodeAuthFailure
 	CodeAuthInvalidToken
 	CodeForbidden
+	// Other codes
+)
+
+// JSON encoding/decoding error codes (5001-6000)
+const (
+	CodeJSONSchema = Code(iota + 5001)
+	CodeJSONSchemaInvalid
+	CodeJSONSchemaNotFound
+	CodeJSONStructInvalid
+	CodeJSONRawInvalid
+	CodeJSONValidationError
+	CodeJSONMarshalError
+	CodeJSONUnmarshalError
+	// Other codes
 )
