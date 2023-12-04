@@ -61,3 +61,13 @@ const (
 	CodeClientErrorOnReadBody
 	// Other codes
 )
+
+// Auth error codes (4001-5000)
+const (
+	CodeAuth = Code(iota + 4001)
+	CodeAuthRefreshTokenExpired
+	CodeAuthAccessTokenExpired
+	CodeAuthFailure
+	CodeAuthInvalidToken
+	CodeForbidden
+)
