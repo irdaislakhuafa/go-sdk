@@ -85,3 +85,12 @@ const (
 	CodeJSONUnmarshalError
 	// Other codes
 )
+
+// Storage error codes (6001-7000)
+const (
+	CodeStorage = Code(iota + 6001)
+	CodeStorageNoFile
+	CodeStorageGenerateURLFailure
+	CodeStorageNoClient
+	// Other codes
+)
