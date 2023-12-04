@@ -105,10 +105,20 @@ const (
 	// Other codes
 )
 
-// GraphQL errors (8001-9000)
+// GraphQL error codes (8001-9000)
 const (
 	CodeGQL = Code(iota + 8001)
 	CodeGQLInvalidValue
 	CodeGQLBuilder
+	// Other codes
+)
+
+// Argon2 error codes (9001-10_000)
+const (
+	CodeArgon2 = Code(iota + 9001)
+	CodeArgon2InvalidEncodedHash
+	CodeArgon2EncodeHashError
+	CodeArgon2DecodeHashError
+	CodeArgon2IncompatibleVersion
 	// Other codes
 )
