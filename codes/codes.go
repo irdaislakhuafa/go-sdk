@@ -2,6 +2,7 @@ package codes
 
 import "math"
 
+// Alias of unsigned int64 to identify errors by {Code}
 type Code uint64
 
 // Default code/no code
@@ -137,3 +138,6 @@ const (
 	CodeSMTPRequestTimeout
 	// Other codes
 )
+
+// Struct to strore list of app message with {Code} as key
+type AppMessage map[Code]Message
