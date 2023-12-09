@@ -122,3 +122,18 @@ const (
 	CodeArgon2IncompatibleVersion
 	// Other codes
 )
+
+// aes 256 gcm error codes (10_001 - 11_000)
+const (
+	CodeAES256GCM = Code(iota + 10_001)
+	CodeAES256GCMOpenError
+	// Other codes
+)
+
+// smtp error codes (11_001 - 12_000)
+const (
+	CodeSMTP = Code(iota + 11_001)
+	CodeSMTPBadRequest
+	CodeSMTPRequestTimeout
+	// Other codes
+)
