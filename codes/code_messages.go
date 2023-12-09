@@ -187,13 +187,21 @@ var (
 			},
 			language.Indonesian: Message{
 				StatusCode: http.StatusInternalServerError,
-				Title:      language.HTTPStatusText(language.English, http.StatusInternalServerError),
+				Title:      language.HTTPStatusText(language.Indonesian, http.StatusInternalServerError),
 				Body:       "Terjadi kendala diserver. Mohon hubungi administrator.",
 			},
 		},
 		MsgCodeErrNotImplemented: {
-			language.English:    Message{},
-			language.Indonesian: Message{},
+			language.English: Message{
+				StatusCode: http.StatusNotImplemented,
+				Title:      language.HTTPStatusText(language.English, http.StatusNotImplemented),
+				Body:       "Not Implemented. Please contact the administrator.",
+			},
+			language.Indonesian: Message{
+				StatusCode: http.StatusNotImplemented,
+				Title:      language.HTTPStatusText(language.Indonesian, http.StatusNotImplemented),
+				Body:       "Layanan tidak tersedia. Mohon hubungi administrator.",
+			},
 		},
 		MsgCodeErrServiceUnavailable: {
 			language.English:    Message{},
