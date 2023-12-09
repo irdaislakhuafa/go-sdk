@@ -11,7 +11,7 @@ import (
 
 func Test_Compile(t *testing.T) {
 	type args struct {
-		code int
+		code Code
 		lang language.Language
 	}
 
@@ -24,12 +24,12 @@ func Test_Compile(t *testing.T) {
 	tests := []test{
 		{
 			name:       "default success message in english language",
-			args:       args{code: http.StatusOK, lang: language.English},
+			args:       args{code: CodeSuccess, lang: language.English},
 			wantResult: Message{StatusCode: http.StatusOK, Title: "OK", Body: "Request successful"},
 		},
 		{
 			name:       "test success in indonesian language",
-			args:       args{code: http.StatusOK, lang: language.Indonesian},
+			args:       args{code: CodeSuccess, lang: language.Indonesian},
 			wantResult: Message{StatusCode: http.StatusOK, Title: "OK", Body: "Request berhasil"},
 		},
 	}

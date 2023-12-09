@@ -2,7 +2,6 @@ package codes
 
 import (
 	"math"
-	"net/http"
 
 	"github.com/irdaislakhuafa/go-sdk/language"
 )
@@ -144,12 +143,68 @@ const (
 	// Other codes
 )
 
-func Compile(httpStatusCode int, lang language.Language) Message {
-	msgs := getMessages(httpStatusCode)
+var codeMessages = map[Code](map[language.Language]Message){
+	// Error messages
+	CodeInvalidValue:            getMessages(MsgCodeErrBadRequest),
+	CodeContextDeadlineExceeded: getMessages(MsgCodeErrContextTimeout),
+	CodeContextCanceled:         getMessages(MsgCodeErrContextTimeout),
+	CodeInternalServerError:     getMessages(MsgCodeErrInternalServerError),
+	CodeServerUnavailable:       getMessages(MsgCodeErrServiceUnavailable),
+	CodeNotImplemented:          getMessages(MsgCodeErrNotImplemented),
+	CodeBadRequest:              getMessages(MsgCodeErrBadRequest),
+	CodeNotFound:                getMessages(MsgCodeErrNotFound),
+	CodeConflict:                getMessages(MsgCodeErrConflict),
+	CodeUnauthorized:            getMessages(MsgCodeErrUnauthorized),
+	CodeTooManyRequest:          getMessages(MsgCodeErrTooManyRequest),
+	CodeMarshal:                 getMessages(MsgCodeErrBadRequest),
+	CodeUnmarshal:               getMessages(MsgCodeErrBadRequest),
+	CodeJSONMarshalError:        getMessages(MsgCodeErrBadRequest),
+	CodeJSONUnmarshalError:      getMessages(MsgCodeErrBadRequest),
+
+	CodeSQL:                   getMessages(MsgCodeErrInternalServerError),
+	CodeSQLInit:               getMessages(MsgCodeErrInternalServerError),
+	CodeSQLBuilder:            getMessages(MsgCodeErrInternalServerError),
+	CodeSQLTxBegin:            getMessages(MsgCodeErrInternalServerError),
+	CodeSQLTxCommit:           getMessages(MsgCodeErrInternalServerError),
+	CodeSQLTxRollback:         getMessages(MsgCodeErrInternalServerError),
+	CodeSQLTxExec:             getMessages(MsgCodeErrInternalServerError),
+	CodeSQLPrepareStmt:        getMessages(MsgCodeErrInternalServerError),
+	CodeSQLRead:               getMessages(MsgCodeErrInternalServerError),
+	CodeSQLRowScan:            getMessages(MsgCodeErrInternalServerError),
+	CodeSQLRecordDoesNotExist: getMessages(MsgCodeErrNotFound),
+	CodeSQLUniqueConstraint:   getMessages(MsgCodeErrConflict),
+	CodeSQLConflict:           getMessages(MsgCodeErrConflict),
+	CodeSQLNoRowsAffected:     getMessages(MsgCodeErrNotFound),
+
+	CodeClientMarshal:         getMessages(MsgCodeErrInternalServerError),
+	CodeClientUnmarshal:       getMessages(MsgCodeErrInternalServerError),
+	CodeClientErrorOnRequest:  getMessages(MsgCodeErrInternalServerError),
+	CodeClientErrorOnReadBody: getMessages(MsgCodeErrInternalServerError),
+
+	CodeAuth:                    getMessages(MsgCodeErrUnauthorized),
+	CodeAuthRefreshTokenExpired: getMessages(MsgCodeErrRefreshTokenExpired),
+	CodeAuthAccessTokenExpired:  getMessages(MsgCodeErrAccessTokenExpired),
+	CodeAuthFailure:             getMessages(MsgCodeErrUnauthorized),
+	CodeAuthInvalidToken:        getMessages(MsgCodeErrInvalidToken),
+	CodeForbidden:               getMessages(MsgCodeErrForbidden),
+
+	// Successfull messages
+	CodeSuccess: getMessages(MsgCodeSuccessDefault),
+}
+
+func getCodeMessages(code Code) map[language.Language]Message {
+	if msg, isOk := codeMessages[code]; isOk {
+		return msg
+	}
+	return map[language.Language]Message{}
+}
+
+func Compile(code Code, lang language.Language) Message {
+	msgs := getCodeMessages(code)
 	if msg, isOk := msgs[lang]; isOk {
 		return msg
 	}
 
-	msg := getMessages(http.StatusOK)[language.English]
+	msg := getCodeMessages(CodeSuccess)[language.English]
 	return msg
 }

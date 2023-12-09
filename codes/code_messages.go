@@ -6,6 +6,29 @@ import (
 	"github.com/irdaislakhuafa/go-sdk/language"
 )
 
+// code of messages
+const (
+	// 2xx (default)
+	MsgCodeSuccessDefault = (iota + 1)
+
+	// 4xx
+	MsgCodeErrBadRequest
+	MsgCodeErrUnauthorized
+	MsgCodeErrInvalidToken
+	MsgCodeErrRefreshTokenExpired
+	MsgCodeErrAccessTokenExpired
+	MsgCodeErrForbidden
+	MsgCodeErrNotFound
+	MsgCodeErrContextTimeout
+	MsgCodeErrConflict
+	MsgCodeErrTooManyRequest
+
+	// 5xx
+	MsgCodeErrInternalServerError
+	MsgCodeErrNotImplemented
+	MsgCodeErrServiceUnavailable
+)
+
 // Struct to store error message
 type Message struct {
 	StatusCode int
@@ -17,7 +40,7 @@ var (
 	// Collections of messages in multiple language
 	messages = map[int](map[language.Language]Message){
 		// HTTP Status 1xx
-		http.StatusOK: {
+		MsgCodeSuccessDefault: {
 			language.English: Message{
 				StatusCode: http.StatusOK,
 				Title:      language.HTTPStatusText(language.English, http.StatusOK),
@@ -34,7 +57,7 @@ var (
 		// HTTP Status 3xx
 
 		// HTTP Status 4xx
-		http.StatusBadRequest: {
+		MsgCodeErrBadRequest: {
 			language.English: Message{
 				StatusCode: http.StatusBadRequest,
 				Title:      language.HTTPStatusText(language.English, http.StatusBadRequest),
@@ -46,14 +69,18 @@ var (
 				Body:       "Masukan data tidak valid. Mohon cek kembali masukan anda.",
 			},
 		},
+		MsgCodeErrUnauthorized: {
+			language.English:    Message{},
+			language.Indonesian: Message{},
+		},
 
 		// HTTP Status 5xx
 	}
 )
 
-func getMessages(httpStatusCode int) map[language.Language]Message {
+func getMessages(msgCode int) map[language.Language]Message {
 	if messages == nil {
 		return map[language.Language]Message{}
 	}
-	return messages[httpStatusCode]
+	return messages[msgCode]
 }
