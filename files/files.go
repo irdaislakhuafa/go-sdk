@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-// to check is file (not dir) exists, will return true if exist ant return false if not file (dir) or not exist
+// To check is file (not dir) exists, will return true if exist ant return false if not file (dir) or not exist
 func IsExist(pathToFile string) bool {
 	fileInfo, err := os.Stat(pathToFile)
 	if err != nil {
@@ -18,7 +18,7 @@ func IsExist(pathToFile string) bool {
 	return !fileInfo.IsDir()
 }
 
-// get file extension (ex. "txt, csv, docs, json, yaml")
+// Get file extension (ex. "txt, csv, docs, json, yaml")
 func GetFileExtenstion(pathOrFileName string) string {
 	fileName := filepath.Base(pathOrFileName)
 	splitedName := strings.Split(fileName, ".")

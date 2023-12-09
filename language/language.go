@@ -16,6 +16,6 @@ var (
 	}
 )
 
-func HTTPStatusText(lang Language, code int) string {
-	return httpStatusLanguages[lang][code]
+func HTTPStatusText(lang Language, httpStatusCode int) string {
+	return httpStatusLanguages[lang][httpStatusCode]
 }

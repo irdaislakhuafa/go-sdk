@@ -5,13 +5,13 @@ import "net/http"
 // Surprisingly, we have a kinda official translation for HTTP status in Indonesian.
 // Check it here: https://id.wikipedia.org/wiki/Daftar_kode_status_HTTP
 var statusTextID = map[int]string{
-	// HTTP Status 100
+	// HTTP Status 1xx
 	http.StatusContinue:           "Lanjutkan",
 	http.StatusSwitchingProtocols: "Beralih Protokol",
 	http.StatusProcessing:         "Processing",
 	http.StatusEarlyHints:         "Petunjuk Awal",
 
-	// HTTP Status 200
+	// HTTP Status 2xx
 	http.StatusOK:                   "OK",
 	http.StatusCreated:              "Dibuat",
 	http.StatusAccepted:             "Diterima",
@@ -23,7 +23,7 @@ var statusTextID = map[int]string{
 	http.StatusAlreadyReported:      "Sudah Dilaporkan",
 	http.StatusIMUsed:               "IM Used",
 
-	// HTTP Status 300
+	// HTTP Status 3xx
 	http.StatusMultipleChoices:   "Pilihan Ganda",
 	http.StatusMovedPermanently:  "Dipindahkan Permanen",
 	http.StatusFound:             "Ditemukan",
@@ -33,7 +33,7 @@ var statusTextID = map[int]string{
 	http.StatusTemporaryRedirect: "Pengalihan Sementara",
 	http.StatusPermanentRedirect: "Pengalihan Permanen",
 
-	// HTTP Status 400
+	// HTTP Status 4xx
 	http.StatusBadRequest:                   "Bad Request",
 	http.StatusUnauthorized:                 "Tidak Diperbolehkan",
 	http.StatusPaymentRequired:              "Payment Required",
@@ -64,7 +64,7 @@ var statusTextID = map[int]string{
 	http.StatusRequestHeaderFieldsTooLarge:  "Request Header Fields Too Large",
 	http.StatusUnavailableForLegalReasons:   "Unavailable For Legal Reasons",
 
-	// HTTP Status 500
+	// HTTP Status 5xx
 	http.StatusInternalServerError:           "Masalah Peladen Dalam",
 	http.StatusNotImplemented:                "'Not Implemented",
 	http.StatusBadGateway:                    "Bad Gateway",
