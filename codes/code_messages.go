@@ -70,11 +70,63 @@ var (
 			},
 		},
 		MsgCodeErrUnauthorized: {
+			language.English: Message{
+				StatusCode: http.StatusUnauthorized,
+				Title:      language.HTTPStatusText(language.English, http.StatusUnauthorized),
+				Body:       "Unauthorized access. You are not authorized to access this resource.",
+			},
+			language.Indonesian: Message{
+				StatusCode: http.StatusUnauthorized,
+				Title:      language.HTTPStatusText(language.Indonesian, http.StatusUnauthorized),
+				Body:       "Akses ditolak. Anda tidak memilik izin untuk mengakses sumber daya ini.",
+			},
+		},
+		MsgCodeErrInvalidToken: {
+			language.English:    Message{},
+			language.Indonesian: Message{},
+		},
+		MsgCodeErrRefreshTokenExpired: {
+			language.English:    Message{},
+			language.Indonesian: Message{},
+		},
+		MsgCodeErrAccessTokenExpired: {
+			language.English:    Message{},
+			language.Indonesian: Message{},
+		},
+		MsgCodeErrForbidden: {
+			language.English:    Message{},
+			language.Indonesian: Message{},
+		},
+		MsgCodeErrNotFound: {
+			language.English:    Message{},
+			language.Indonesian: Message{},
+		},
+		MsgCodeErrContextTimeout: {
+			language.English:    Message{},
+			language.Indonesian: Message{},
+		},
+		MsgCodeErrConflict: {
+			language.English:    Message{},
+			language.Indonesian: Message{},
+		},
+		MsgCodeErrTooManyRequest: {
 			language.English:    Message{},
 			language.Indonesian: Message{},
 		},
 
 		// HTTP Status 5xx
+		MsgCodeErrInternalServerError: {
+			language.English:    Message{},
+			language.Indonesian: Message{},
+		},
+		MsgCodeErrNotImplemented: {
+			language.English:    Message{},
+			language.Indonesian: Message{},
+		},
+		MsgCodeErrServiceUnavailable: {
+			language.English:    Message{},
+			language.Indonesian: Message{},
+		},
 	}
 )
 
