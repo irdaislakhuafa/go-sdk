@@ -113,13 +113,21 @@ var (
 			},
 			language.Indonesian: Message{
 				StatusCode: http.StatusUnauthorized,
-				Title:      language.HTTPStatusText(language.English, http.StatusUnauthorized),
-				Body:       "Token akses sudah tidak berlaku. Mohon perbarui sesi anda dengan mengakses ulang laman",
+				Title:      language.HTTPStatusText(language.Indonesian, http.StatusUnauthorized),
+				Body:       "Token akses sudah tidak berlaku. Mohon perbarui sesi anda dengan mengakses ulang laman.",
 			},
 		},
 		MsgCodeErrForbidden: {
-			language.English:    Message{},
-			language.Indonesian: Message{},
+			language.English: Message{
+				StatusCode: http.StatusForbidden,
+				Title:      language.HTTPStatusText(language.English, http.StatusForbidden),
+				Body:       "Forbidden. You don't have permission to access this resource.",
+			},
+			language.Indonesian: Message{
+				StatusCode: http.StatusForbidden,
+				Title:      language.HTTPStatusText(language.Indonesian, http.StatusForbidden),
+				Body:       "Terlarang. Anda tidak memiliki izin untuk mengakses laman ini",
+			},
 		},
 		MsgCodeErrNotFound: {
 			language.English:    Message{},
