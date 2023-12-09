@@ -204,8 +204,16 @@ var (
 			},
 		},
 		MsgCodeErrServiceUnavailable: {
-			language.English:    Message{},
-			language.Indonesian: Message{},
+			language.English: Message{
+				StatusCode: http.StatusServiceUnavailable,
+				Title:      language.HTTPStatusText(language.English, http.StatusServiceUnavailable),
+				Body:       "Service is unavailable. Please contact the administrator.",
+			},
+			language.Indonesian: Message{
+				StatusCode: http.StatusServiceUnavailable,
+				Title:      language.HTTPStatusText(language.English, http.StatusServiceUnavailable),
+				Body:       "Layanan sedang tidak tersedia. Mohon hubungi administrator.",
+			},
 		},
 	}
 )
