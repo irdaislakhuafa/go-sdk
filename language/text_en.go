@@ -3,13 +3,13 @@ package language
 import "net/http"
 
 var statusTextEN = map[int]string{
-	// HTTP Status 100
+	// HTTP Status 1xx
 	http.StatusContinue:           "Continue",
 	http.StatusSwitchingProtocols: "Switching Protocols",
 	http.StatusProcessing:         "Processing",
 	http.StatusEarlyHints:         "Early Hints",
 
-	// HTTP Status 200
+	// HTTP Status 2xx
 	http.StatusOK:                   "OK",
 	http.StatusCreated:              "Created",
 	http.StatusAccepted:             "Accepted",
@@ -21,7 +21,7 @@ var statusTextEN = map[int]string{
 	http.StatusAlreadyReported:      "Already Reported",
 	http.StatusIMUsed:               "IM Used",
 
-	// HTTP Status 300
+	// HTTP Status 3xx
 	http.StatusMultipleChoices:   "Multiple Choices",
 	http.StatusMovedPermanently:  "Moved Permanently",
 	http.StatusFound:             "Found",
@@ -31,7 +31,7 @@ var statusTextEN = map[int]string{
 	http.StatusTemporaryRedirect: "Temporary Redirect",
 	http.StatusPermanentRedirect: "Permanent Redirect",
 
-	// HTTP Status 400
+	// HTTP Status 4xx
 	http.StatusBadRequest:                   "Bad Request",
 	http.StatusUnauthorized:                 "Unauthorized",
 	http.StatusPaymentRequired:              "Payment Required",
@@ -62,7 +62,7 @@ var statusTextEN = map[int]string{
 	http.StatusRequestHeaderFieldsTooLarge:  "Request Header Fields Too Large",
 	http.StatusUnavailableForLegalReasons:   "Unavailable For Legal Reasons",
 
-	// HTTP Status 500
+	// HTTP Status 5xx
 	http.StatusInternalServerError:           "Internal Server Error",
 	http.StatusNotImplemented:                "Not Implemented",
 	http.StatusBadGateway:                    "Bad Gateway",
