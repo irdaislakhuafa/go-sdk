@@ -1,6 +1,11 @@
 package codes
 
-import "math"
+import (
+	"math"
+	"net/http"
+
+	"github.com/irdaislakhuafa/go-sdk/language"
+)
 
 // Alias of unsigned int64 to identify errors by {Code}
 type Code uint64
@@ -139,5 +144,12 @@ const (
 	// Other codes
 )
 
-// Struct to strore list of app message with {Code} as key
-type AppMessage map[Code]Message
+func Compile(httpStatusCode int, lang language.Language) Message {
+	msgs := getMessages(httpStatusCode)
+	if msg, isOk := msgs[lang]; isOk {
+		return msg
+	}
+
+	msg := getMessages(http.StatusOK)[language.English]
+	return msg
+}
