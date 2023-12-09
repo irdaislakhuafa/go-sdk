@@ -94,8 +94,16 @@ var (
 			},
 		},
 		MsgCodeErrRefreshTokenExpired: {
-			language.English:    Message{},
-			language.Indonesian: Message{},
+			language.English: Message{
+				StatusCode: http.StatusUnauthorized,
+				Title:      language.HTTPStatusText(language.English, http.StatusUnauthorized),
+				Body:       "Session refresh token has expired. Please renew your session by reloading.",
+			},
+			language.Indonesian: Message{
+				StatusCode: http.StatusUnauthorized,
+				Title:      language.HTTPStatusText(language.Indonesian, http.StatusUnauthorized),
+				Body:       "Token pembaruan sudah tidak berlaku. Mohon perbarui sesi anda dengan mengakses ulang laman.",
+			},
 		},
 		MsgCodeErrAccessTokenExpired: {
 			language.English:    Message{},
