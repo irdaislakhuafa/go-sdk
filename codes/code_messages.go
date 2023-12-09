@@ -82,8 +82,16 @@ var (
 			},
 		},
 		MsgCodeErrInvalidToken: {
-			language.English:    Message{},
-			language.Indonesian: Message{},
+			language.English: Message{
+				StatusCode: http.StatusUnauthorized,
+				Title:      language.HTTPStatusText(language.English, http.StatusUnauthorized),
+				Body:       "Invalid token. Please renew your session by reloading.",
+			},
+			language.Indonesian: Message{
+				StatusCode: http.StatusUnauthorized,
+				Title:      language.HTTPStatusText(language.Indonesian, http.StatusUnauthorized),
+				Body:       "Token tidak valid. Mohon perbarui sesi anda dengan menggakses ulang laman.",
+			},
 		},
 		MsgCodeErrRefreshTokenExpired: {
 			language.English:    Message{},
