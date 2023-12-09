@@ -2,7 +2,7 @@ package language
 
 import "net/http"
 
-var statusTextID = map[int]string{
+var statusTextEN = map[int]string{
 	// HTTP Status 100
 	http.StatusContinue:           "Continue",
 	http.StatusSwitchingProtocols: "Switching Protocols",
