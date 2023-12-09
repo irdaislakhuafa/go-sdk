@@ -166,8 +166,16 @@ var (
 			},
 		},
 		MsgCodeErrTooManyRequest: {
-			language.English:    Message{},
-			language.Indonesian: Message{},
+			language.English: Message{
+				StatusCode: http.StatusTooManyRequests,
+				Title:      language.HTTPStatusText(language.English, http.StatusTooManyRequests),
+				Body:       "Too many requests. Please wait and try again after a few seconds.",
+			},
+			language.Indonesian: Message{
+				StatusCode: http.StatusTooManyRequests,
+				Title:      language.HTTPStatusText(language.Indonesian, http.StatusTooManyRequests),
+				Body:       "Terlalu banyak permintaan. Mohon tunggu dan coba lagi setelah beberapa saat.",
+			},
 		},
 
 		// HTTP Status 5xx
