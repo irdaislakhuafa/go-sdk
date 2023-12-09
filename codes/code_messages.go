@@ -149,13 +149,21 @@ var (
 			},
 			language.Indonesian: Message{
 				StatusCode: http.StatusRequestTimeout,
-				Title:      language.HTTPStatusText(language.English, http.StatusRequestTimeout),
+				Title:      language.HTTPStatusText(language.Indonesian, http.StatusRequestTimeout),
 				Body:       "Waktu permintaan habis.",
 			},
 		},
 		MsgCodeErrConflict: {
-			language.English:    Message{},
-			language.Indonesian: Message{},
+			language.English: Message{
+				StatusCode: http.StatusConflict,
+				Title:      language.HTTPStatusText(language.English, http.StatusConflict),
+				Body:       "Record has existed. Please validate your input or contact the administrator.",
+			},
+			language.Indonesian: Message{
+				StatusCode: http.StatusConflict,
+				Title:      language.HTTPStatusText(language.Indonesian, http.StatusConflict),
+				Body:       "Data sudah ada. Mohon cek kembali masukan anda atau hubungi administrator.",
+			},
 		},
 		MsgCodeErrTooManyRequest: {
 			language.English:    Message{},
