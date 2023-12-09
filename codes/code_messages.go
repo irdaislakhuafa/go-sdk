@@ -130,12 +130,28 @@ var (
 			},
 		},
 		MsgCodeErrNotFound: {
-			language.English:    Message{},
-			language.Indonesian: Message{},
+			language.English: Message{
+				StatusCode: http.StatusNotFound,
+				Title:      language.HTTPStatusText(language.English, http.StatusNotFound),
+				Body:       "Record doesn't exist. Please validate your input or contact the administrator.",
+			},
+			language.Indonesian: Message{
+				StatusCode: http.StatusNotFound,
+				Title:      language.HTTPStatusText(language.Indonesian, http.StatusNotFound),
+				Body:       "Data tidak ditemukan. Mohon cek kembali masukan anda atau hubungi administrator.",
+			},
 		},
 		MsgCodeErrContextTimeout: {
-			language.English:    Message{},
-			language.Indonesian: Message{},
+			language.English: Message{
+				StatusCode: http.StatusRequestTimeout,
+				Title:      language.HTTPStatusText(language.English, http.StatusRequestTimeout),
+				Body:       "Request time has been exceeded.",
+			},
+			language.Indonesian: Message{
+				StatusCode: http.StatusRequestTimeout,
+				Title:      language.HTTPStatusText(language.English, http.StatusRequestTimeout),
+				Body:       "Waktu permintaan habis.",
+			},
 		},
 		MsgCodeErrConflict: {
 			language.English:    Message{},
