@@ -180,8 +180,16 @@ var (
 
 		// HTTP Status 5xx
 		MsgCodeErrInternalServerError: {
-			language.English:    Message{},
-			language.Indonesian: Message{},
+			language.English: Message{
+				StatusCode: http.StatusInternalServerError,
+				Title:      language.HTTPStatusText(language.English, http.StatusInternalServerError),
+				Body:       "Internal server error. Please contact the administrator.",
+			},
+			language.Indonesian: Message{
+				StatusCode: http.StatusInternalServerError,
+				Title:      language.HTTPStatusText(language.English, http.StatusInternalServerError),
+				Body:       "Terjadi kendala diserver. Mohon hubungi administrator.",
+			},
 		},
 		MsgCodeErrNotImplemented: {
 			language.English:    Message{},
