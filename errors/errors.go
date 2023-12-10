@@ -99,7 +99,7 @@ func GetCaller(cause error) (file string, line int, message string, err error) {
 	if st, isOk := cause.(*stacktrace); isOk {
 		return st.file, st.line, st.message, nil
 	} else {
-		return "", 0, "", create(nil, codes.NoCode, "failed to cast error cause to stacktrace")
+		return "", 0, "", create(nil, codes.NoCode, "failed to cast error to stacktrace")
 	}
 }
 
