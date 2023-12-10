@@ -102,3 +102,7 @@ func GetCaller(cause error) (file string, line int, message string, err error) {
 		return "", 0, "", create(nil, codes.NoCode, "failed to cast error cause to stacktrace")
 	}
 }
+
+func NewWithCode(code codes.Code, msg string, val ...any) error {
+	return create(nil, code, msg, val...)
+}
