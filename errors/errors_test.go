@@ -2,10 +2,14 @@ package errors
 
 import (
 	"errors"
+	"fmt"
+	"net/http"
+	"reflect"
 	"testing"
 
 	"github.com/irdaislakhuafa/go-sdk/codes"
 	"github.com/irdaislakhuafa/go-sdk/files"
+	"github.com/irdaislakhuafa/go-sdk/language"
 )
 
 func Test_GetCaller(t *testing.T) {
@@ -80,5 +84,54 @@ func Test_GetCaller(t *testing.T) {
 				t.Fatalf("want result file is '%v' but got '%v'", tt.wantResult.file, file)
 			}
 		})
+	}
+}
+
+func Test_Compile(t *testing.T) {
+	type args struct {
+		err  error
+		lang language.Language
+	}
+
+	type wantResult struct {
+		statusCode int
+		result     App
+	}
+
+	type test struct {
+		name       string
+		args       args
+		wantResult wantResult
+	}
+
+	tests := []test{
+		{
+			name: "test auth failure compile success",
+			args: args{err: NewWithCode(codes.CodeAuthFailure, "authentication failure"), lang: language.English},
+			wantResult: wantResult{
+				statusCode: http.StatusUnauthorized,
+				result: App{
+					Code:  codes.CodeAuthFailure,
+					Title: language.HTTPStatusText(language.English, http.StatusUnauthorized),
+					Body:  codes.GetCodeMessages(codes.CodeAuthFailure)[language.Indonesian].Body,
+					sys:   NewWithCode(codes.CodeAuthAccessTokenExpired, "authentication failed"),
+				},
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			httpStatusCode, app := Compile(tt.args.err, tt.args.lang)
+			if httpStatusCode != tt.wantResult.statusCode {
+				t.Fatalf("want result status code is '%v' but got '%v'", tt.wantResult.statusCode, httpStatusCode)
+			}
+
+			if isCodeEqual := reflect.DeepEqual(app.Code, tt.wantResult.result.Code); !isCodeEqual {
+				t.Fatalf("want result app code is '%v' but got '%v'", tt.wantResult.result.Code, app.Code)
+			}
+		})
+
+		fmt.Println("")
 	}
 }
