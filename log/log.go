@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"os"
 	"sync"
+	"time"
 
+	"github.com/irdaislakhuafa/go-sdk/appcontext"
 	"github.com/irdaislakhuafa/go-sdk/errors"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -94,6 +96,18 @@ func GetCaller(value any) any {
 	return value
 }
 
-// func getContextFields(ctx context.Context) map[string]any {
+func getContextFields(ctx context.Context) map[string]any {
+	reqStartTime := appcontext.GetRequestStartTime(ctx)
+	timeElapsed := "0ms"
 
-// }
+	if !reqStartTime.IsZero() {
+		timeElapsed = fmt.Sprintf("%dms", uint64(time.Since(reqStartTime)/time.Millisecond))
+	}
+
+	return map[string]any{
+		"request_id":      appcontext.GetRequestID(ctx),
+		"user_agent":      appcontext.GetUserAgent(ctx),
+		"service_version": appcontext.GetServiceVersion(ctx),
+		"time_elapsed":    timeElapsed,
+	}
+}
