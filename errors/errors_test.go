@@ -113,8 +113,21 @@ func Test_Compile(t *testing.T) {
 				result: App{
 					Code:  codes.CodeAuthFailure,
 					Title: language.HTTPStatusText(language.English, http.StatusUnauthorized),
-					Body:  codes.GetCodeMessages(codes.CodeAuthFailure)[language.Indonesian].Body,
+					Body:  codes.GetCodeMessages(codes.CodeAuthFailure)[language.English].Body,
 					sys:   NewWithCode(codes.CodeAuthAccessTokenExpired, "authentication failed"),
+				},
+			},
+		},
+		{
+			name: "test failed",
+			args: args{err: NewWithCode(codes.NoCode, "no code"), lang: language.English},
+			wantResult: wantResult{
+				statusCode: http.StatusInternalServerError,
+				result: App{
+					Code:  codes.NoCode,
+					Title: language.HTTPStatusText(language.English, http.StatusInternalServerError),
+					Body:  codes.GetCodeMessages(codes.NoCode)[language.English].Body,
+					sys:   nil,
 				},
 			},
 		},
@@ -132,6 +145,6 @@ func Test_Compile(t *testing.T) {
 			}
 		})
 
-		fmt.Println("")
+		fmt.Printf("result: %+v\n\n", tt.wantResult.result)
 	}
 }
