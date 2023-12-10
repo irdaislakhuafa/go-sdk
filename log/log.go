@@ -93,3 +93,7 @@ func GetCaller(value any) any {
 
 	return value
 }
+
+// func getContextFields(ctx context.Context) map[string]any {
+
+// }
