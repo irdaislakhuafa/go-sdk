@@ -192,7 +192,7 @@ var codeMessages = map[Code](map[language.Language]Message){
 	CodeSuccess: getMessages(MsgCodeSuccessDefault),
 }
 
-func getCodeMessages(code Code) map[language.Language]Message {
+func GetCodeMessages(code Code) map[language.Language]Message {
 	if msg, isOk := codeMessages[code]; isOk {
 		return msg
 	}
@@ -200,11 +200,11 @@ func getCodeMessages(code Code) map[language.Language]Message {
 }
 
 func Compile(code Code, lang language.Language) Message {
-	msgs := getCodeMessages(code)
+	msgs := GetCodeMessages(code)
 	if msg, isOk := msgs[lang]; isOk {
 		return msg
 	}
 
-	msg := getCodeMessages(CodeSuccess)[language.English]
+	msg := GetCodeMessages(CodeSuccess)[language.English]
 	return msg
 }
