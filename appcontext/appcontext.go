@@ -38,3 +38,14 @@ func GetRequestID(ctx context.Context) string {
 	requestID, isOk := ctx.Value(requestID).(string)
 	return operator.Ternary[string](!isOk, "", requestID)
 }
+
+// Set service version to context
+func SetServiceVersion(ctx context.Context, version string) context.Context {
+	return context.WithValue(ctx, serviceVersion, version)
+}
+
+// Get service version from context and will return empty string if not exist
+func GetServiceVersion(ctx context.Context) string {
+	serviceVersion, isOk := ctx.Value(serviceVersion).(string)
+	return operator.Ternary[string](!isOk, "", serviceVersion)
+}
