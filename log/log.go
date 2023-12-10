@@ -57,27 +57,39 @@ func Init(cfg Config) Interface {
 }
 
 func (l *logger) Trace(ctx context.Context, obj interface{}) {
-	panic("not implemented") // TODO: Implement
+	l.log.Trace().
+		Fields(getContextFields(ctx)).
+		Msg(fmt.Sprint(GetCaller(ctx)))
 }
 
 func (l *logger) Debug(ctx context.Context, obj interface{}) {
-	panic("not implemented") // TODO: Implement
+	l.log.Debug().
+		Fields(getContextFields(ctx)).
+		Msg(fmt.Sprint(GetCaller(ctx)))
 }
 
 func (l *logger) Info(ctx context.Context, obj interface{}) {
-	panic("not implemented") // TODO: Implement
+	l.log.Info().
+		Fields(getContextFields(ctx)).
+		Msg(fmt.Sprint(GetCaller(ctx)))
 }
 
 func (l *logger) Warn(ctx context.Context, obj interface{}) {
-	panic("not implemented") // TODO: Implement
+	l.log.Warn().
+		Fields(getContextFields(ctx)).
+		Msg(fmt.Sprint(GetCaller(ctx)))
 }
 
 func (l *logger) Error(ctx context.Context, obj interface{}) {
-	panic("not implemented") // TODO: Implement
+	l.log.Error().
+		Fields(getContextFields(ctx)).
+		Msg(fmt.Sprint(GetCaller(ctx)))
 }
 
 func (l *logger) Fatal(ctx context.Context, obj interface{}) {
-	panic("not implemented") // TODO: Implement
+	l.log.Fatal().
+		Fields(getContextFields(ctx)).
+		Msg(fmt.Sprint(GetCaller(ctx)))
 }
 
 func GetCaller(value any) any {
