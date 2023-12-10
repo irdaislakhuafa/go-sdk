@@ -27,3 +27,14 @@ func GetAcceptLanguage(ctx context.Context) language.Language {
 	acceptLanguage, isOk := ctx.Value(acceptLanguage).(string)
 	return operator.Ternary[language.Language](!isOk, language.English, language.Language(acceptLanguage))
 }
+
+// Set request id to context
+func SetRequestID(ctx context.Context, id string) context.Context {
+	return context.WithValue(ctx, requestID, id)
+}
+
+// Get request id from context and will return empty string if not exist
+func GetRequestID(ctx context.Context) string {
+	requestID, isOk := ctx.Value(requestID).(string)
+	return operator.Ternary[string](!isOk, "", requestID)
+}
