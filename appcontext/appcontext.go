@@ -2,6 +2,7 @@ package appcontext
 
 import (
 	"context"
+	"time"
 
 	"github.com/irdaislakhuafa/go-sdk/language"
 	"github.com/irdaislakhuafa/go-sdk/operator"
@@ -62,4 +63,12 @@ func GetUserAgent(ctx context.Context) string {
 }
 
 // Set request start time to context
+func SetRequestStartTime(ctx context.Context, rst time.Time) context.Context {
+	return context.WithValue(ctx, requestStartTime, rst)
+}
+
 // Get request start time from context will return zero value of `time.Time` if not exist
+func GetRequestStartTime(ctx context.Context) time.Time {
+	requestStartTime, isOk := ctx.Value(requestStartTime).(time.Time)
+	return operator.Ternary[time.Time](!isOk, time.Time{}, requestStartTime)
+}
