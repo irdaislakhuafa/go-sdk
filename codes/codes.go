@@ -192,19 +192,21 @@ var codeMessages = map[Code](map[language.Language]Message){
 	CodeSuccess: getMessages(MsgCodeSuccessDefault),
 }
 
-func getCodeMessages(code Code) map[language.Language]Message {
+// Get code messages in multiple language by `codes.Code` and `language.Language`. Will return empty value if language not available.
+func GetCodeMessages(code Code) map[language.Language]Message {
 	if msg, isOk := codeMessages[code]; isOk {
 		return msg
 	}
 	return map[language.Language]Message{}
 }
 
+// Compile error codes with specific language to available messages from `codes.GetCodeMessages`
 func Compile(code Code, lang language.Language) Message {
-	msgs := getCodeMessages(code)
+	msgs := GetCodeMessages(code)
 	if msg, isOk := msgs[lang]; isOk {
 		return msg
 	}
 
-	msg := getCodeMessages(CodeSuccess)[language.English]
+	msg := GetCodeMessages(CodeSuccess)[language.English]
 	return msg
 }
