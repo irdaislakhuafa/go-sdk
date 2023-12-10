@@ -1,7 +1,10 @@
 package errors
 
 import (
+	"fmt"
 	"net/http"
+	"runtime"
+	"strings"
 
 	"github.com/irdaislakhuafa/go-sdk/codes"
 	"github.com/irdaislakhuafa/go-sdk/language"
@@ -44,5 +47,58 @@ func Compile(err error, lang language.Language) (int, App) {
 		Title: "Service Error Not Defined",
 		Body:  "Unknown error. Please contact admin",
 		sys:   err,
+	}
+}
+
+func shortFuncName(f *runtime.Func) string {
+	// f.Name() is like one of these:
+	// - "github.com/irdaislakhuafa/go-sdk/<package>.<FuncName>"
+	// - "github.com/irdaislakhuafa/go-sdk/<package>.<Receiver>.<MethodName>"
+	// - "github.com/irdaislakhuafa/go-sdk/<package>.<*PtrReceiver>.<MethodName>"
+	longName := f.Name()
+	withoutPath := longName[strings.LastIndex(longName, "/")+1:]
+	withoutPackage := withoutPath[strings.LastIndex(withoutPath, ".")+1:]
+
+	shortName := withoutPackage
+	shortName = strings.Replace(shortName, "(", "", 1)
+	shortName = strings.Replace(shortName, "*", "", 1)
+	shortName = strings.Replace(shortName, ")", "", 1)
+
+	return shortName
+}
+
+func create(cause error, code codes.Code, msg string, val ...any) error {
+	if code == codes.NoCode {
+		code = GetCode(cause)
+	}
+
+	err := &stacktrace{
+		message: fmt.Sprintf(msg, val...),
+		cause:   cause,
+		code:    code,
+	}
+
+	pc, file, line, isOk := runtime.Caller(2)
+	if !isOk {
+		return err
+	}
+
+	err.file, err.line = file, line
+
+	function := runtime.FuncForPC(pc)
+	if function == nil {
+		return err
+	}
+
+	err.function = shortFuncName(function)
+
+	return err
+}
+
+func GetCaller(cause error) (file string, line int, message string, err error) {
+	if st, isOk := cause.(*stacktrace); isOk {
+		return st.file, st.line, st.message, nil
+	} else {
+		return "", 0, "", create(nil, codes.NoCode, "failed to cast error cause to stacktrace")
 	}
 }
