@@ -18,6 +18,7 @@ func (a *App) Error() string {
 	return a.sys.Error()
 }
 
+// Get `codes.Code` of error and will return `codes.NoCode` if error doesn't have any code
 func GetCode(err error) codes.Code {
 	if err, isOk := err.(*stacktrace); isOk {
 		return err.code
@@ -25,9 +26,9 @@ func GetCode(err error) codes.Code {
 	return codes.NoCode
 }
 
+// Compile returns an error and creates new `App` errors
 func Compile(err error, lang language.Language) (int, App) {
 	code := GetCode(err)
-
 	if errMsg, isOk := codes.GetCodeMessages(code)[lang]; isOk {
 		return errMsg.StatusCode, App{
 			Code:  code,
