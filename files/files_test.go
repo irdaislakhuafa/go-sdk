@@ -92,3 +92,25 @@ func Test_GetFileExtenstion(t *testing.T) {
 		})
 	}
 }
+
+func Test_GetCurrentFileLocation(t *testing.T) {
+	type test struct {
+		name       string
+		wantResult string
+	}
+
+	tests := []test{
+		{
+			name:       "test get current file location",
+			wantResult: "/media/Projects/Golang/go-sdk/files/files_test.go", // NOTE: or replace with this test file location on your local PC
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := GetCurrentFileLocation()
+			if result != tt.wantResult {
+				t.Fatalf("want result is '%v' but got '%v'", tt.wantResult, result)
+			}
+		})
+	}
+}

@@ -3,6 +3,7 @@ package files
 import (
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 )
 
@@ -29,4 +30,11 @@ func GetFileExtenstion(pathOrFileName string) string {
 
 	fileExt := splitedName[len(splitedName)-1]
 	return fileExt
+}
+func GetCurrentFileLocation() string {
+	_, file, _, isOk := runtime.Caller(1)
+	if isOk {
+		return file
+	}
+	return ""
 }
