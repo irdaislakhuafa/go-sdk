@@ -6,6 +6,7 @@ import (
 	"os"
 	"sync"
 
+	"github.com/irdaislakhuafa/go-sdk/errors"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
@@ -75,4 +76,20 @@ func (l *logger) Error(ctx context.Context, obj interface{}) {
 
 func (l *logger) Fatal(ctx context.Context, obj interface{}) {
 	panic("not implemented") // TODO: Implement
+}
+
+func GetCaller(value any) any {
+	switch tErr := value.(type) {
+	case error:
+		file, line, message, err := errors.GetCaller(tErr)
+		if err != nil {
+			return fmt.Sprintf("%s:%#v --- %s", file, line, message)
+		}
+	case string:
+		return tErr
+	default:
+		return fmt.Sprintf("#%v", tErr)
+	}
+
+	return value
 }
