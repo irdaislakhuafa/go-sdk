@@ -49,3 +49,17 @@ func GetServiceVersion(ctx context.Context) string {
 	serviceVersion, isOk := ctx.Value(serviceVersion).(string)
 	return operator.Ternary[string](!isOk, "", serviceVersion)
 }
+
+// Set user agent to context
+func SetUserAgent(ctx context.Context, ua string) context.Context {
+	return context.WithValue(ctx, userAgent, ua)
+}
+
+// Get user agent from context and will return empty string if not exist
+func GetUserAgent(ctx context.Context) string {
+	userAgent, isOk := ctx.Value(userAgent).(string)
+	return operator.Ternary[string](!isOk, "", userAgent)
+}
+
+// Set request start time to context
+// Get request start time from context will return zero value of `time.Time` if not exist
