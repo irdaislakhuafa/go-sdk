@@ -1,6 +1,7 @@
 package files
 
 import (
+	"fmt"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -37,7 +38,7 @@ func Test_IsExist(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
+		t.Run(fmt.Sprintf("%v: %v", GetCurrentMethodName(), tt.name), func(t *testing.T) {
 			if tt.runBeforeExec != nil {
 				tt.runBeforeExec(tt.argPathToFile)
 			}
