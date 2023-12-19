@@ -1,6 +1,7 @@
 package files
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -31,10 +32,23 @@ func GetFileExtenstion(pathOrFileName string) string {
 	fileExt := splitedName[len(splitedName)-1]
 	return fileExt
 }
+
+// Will return string of current file location where this function is called.
 func GetCurrentFileLocation() string {
 	_, file, _, isOk := runtime.Caller(1)
 	if isOk {
 		return file
 	}
 	return ""
+}
+
+// Will return string of current method location where this function is called.
+func GetCurrentMethodName() string {
+	pc, _, _, isOk := runtime.Caller(1)
+	if !isOk {
+		return ""
+	}
+
+	f := runtime.FuncForPC(pc)
+	return fmt.Sprintf("%v()", f.Name())
 }
