@@ -12,7 +12,32 @@ import (
 	"github.com/irdaislakhuafa/go-sdk/errors"
 )
 
-// Encrypt data with AES-256-GCM algorithm
+type AES256GCM interface {
+	// Encrypt data with AES-256-GCM algorithm
+	Encrypt(text []byte) ([]byte, error)
+
+	// Decrypt data with AES-256-GCM algorithm
+	Decrypt(text []byte) ([]byte, error)
+}
+
+type aes256gcm struct {
+	key []byte
+}
+
+// Create new encrypt/decrypt with AES-256-GCM algoritm
+func NewAES256GCM(key []byte) AES256GCM {
+	return &aes256gcm{key: key}
+}
+
+func (a *aes256gcm) Encrypt(text []byte) ([]byte, error) {
+	return EncryptAES256GCM(text, a.key)
+}
+
+func (a *aes256gcm) Decrypt(text []byte) ([]byte, error) {
+	return DecryptAES256GCM(text, a.key)
+}
+
+// Encrypt data with AES-256-GCM algorithm, like `AES256GCM.Encrypt()` but fully functional
 func EncryptAES256GCM(text, key []byte) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
@@ -36,7 +61,7 @@ func EncryptAES256GCM(text, key []byte) ([]byte, error) {
 	return []byte(result), nil
 }
 
-// Decrypt data with AES-256-GCM algorithm
+// Decrypt data with AES-256-GCM algorithm, like `AES256GCM.Decrypt()` but fully functional
 func DecryptAES256GCM(text, key []byte) ([]byte, error) {
 	text, err := base64.StdEncoding.DecodeString(string(text))
 	if err != nil {
