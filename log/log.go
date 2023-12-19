@@ -59,37 +59,37 @@ func Init(cfg Config) Interface {
 func (l *logger) Trace(ctx context.Context, obj interface{}) {
 	l.log.Trace().
 		Fields(getContextFields(ctx)).
-		Msg(fmt.Sprint(GetCaller(ctx)))
+		Msg(fmt.Sprint(GetCaller(obj)))
 }
 
 func (l *logger) Debug(ctx context.Context, obj interface{}) {
 	l.log.Debug().
 		Fields(getContextFields(ctx)).
-		Msg(fmt.Sprint(GetCaller(ctx)))
+		Msg(fmt.Sprint(GetCaller(obj)))
 }
 
 func (l *logger) Info(ctx context.Context, obj interface{}) {
 	l.log.Info().
 		Fields(getContextFields(ctx)).
-		Msg(fmt.Sprint(GetCaller(ctx)))
+		Msg(fmt.Sprint(GetCaller(obj)))
 }
 
 func (l *logger) Warn(ctx context.Context, obj interface{}) {
 	l.log.Warn().
 		Fields(getContextFields(ctx)).
-		Msg(fmt.Sprint(GetCaller(ctx)))
+		Msg(fmt.Sprint(GetCaller(obj)))
 }
 
 func (l *logger) Error(ctx context.Context, obj interface{}) {
 	l.log.Error().
 		Fields(getContextFields(ctx)).
-		Msg(fmt.Sprint(GetCaller(ctx)))
+		Msg(fmt.Sprint(GetCaller(obj)))
 }
 
 func (l *logger) Fatal(ctx context.Context, obj interface{}) {
 	l.log.Fatal().
 		Fields(getContextFields(ctx)).
-		Msg(fmt.Sprint(GetCaller(ctx)))
+		Msg(fmt.Sprint(GetCaller(obj)))
 }
 
 func GetCaller(value any) any {
@@ -102,7 +102,7 @@ func GetCaller(value any) any {
 	case string:
 		return tErr
 	default:
-		return fmt.Sprintf("#%v", tErr)
+		return fmt.Sprintf("%#v", tErr)
 	}
 
 	return value
