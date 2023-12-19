@@ -1,7 +1,6 @@
 package cryptography
 
 import (
-	"context"
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/hex"
@@ -11,8 +10,11 @@ import (
 )
 
 type SHA256[T any] interface {
+	// Added key to hash SHA-256
 	WithKey(key []byte) *T
-	Build(ctx context.Context) (string, error)
+
+	// Generate SHA-256 string value from `text` and return error with code `codes.CodeInvalidValue` if generate is failed
+	Build() (string, error)
 }
 
 type sha256impl struct {
@@ -27,8 +29,7 @@ func NewSHA256(text []byte) SHA256[sha256impl] {
 	}
 }
 
-// Generate SHA-256 string value from `text` and return error with code `codes.CodeInvalidValue` if generate is failed
-func (s *sha256impl) Build(ctx context.Context) (string, error) {
+func (s *sha256impl) Build() (string, error) {
 	if s.key == nil {
 		hash := sha256.New()
 		if _, err := hash.Write(s.text); err != nil {
@@ -44,7 +45,6 @@ func (s *sha256impl) Build(ctx context.Context) (string, error) {
 	}
 }
 
-// Added key to hash SHA-256
 func (s *sha256impl) WithKey(key []byte) *sha256impl {
 	s.key = key
 	return s
