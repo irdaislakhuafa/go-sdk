@@ -12,6 +12,7 @@ import (
 	"github.com/irdaislakhuafa/go-sdk/errors"
 )
 
+// Encrypt data with AES-256-GCM algorithm
 func EncryptAES256GCM(text, key []byte) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
@@ -28,11 +29,12 @@ func EncryptAES256GCM(text, key []byte) ([]byte, error) {
 		return nil, errors.NewWithCode(codes.CodeInvalidValue, "failed to read random value for nonce, %v", err)
 	}
 
-	result := []byte{}
-	gcmSeal := gcm.Seal(nonce, nonce, text, nil)
-	_ = hex.Encode(result, gcmSeal)
-	base64.StdEncoding.Encode(result, result)
-	return result, nil
+	s := string(gcm.Seal(nonce, nonce, text, nil))
+	s = hex.EncodeToString([]byte(s))
+	s = base64.StdEncoding.EncodeToString([]byte(s))
+
+	return []byte(s), nil
 }
 
+// Decrypt data with AES-256-GCM algorithm
 // func DecryptAES256GCM(text, key []byte) ([]byte, error)
