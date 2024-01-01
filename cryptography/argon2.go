@@ -18,6 +18,15 @@ type Argon2 interface {
 
 	// Compare plain text with hash argon2, return `true`` and error `nil` if equal
 	Compare(text, hashedText []byte) (bool, error)
+
+	// Set memory for argon2 parameter
+	SetMemory(memory uint32) Argon2
+
+	// Set iterations for argon2 parameter
+	SetIterations(iterations uint32) Argon2
+
+	// Set parallelism for argon2 parameter
+	SetParallelism(parallelism uint8) Argon2
 }
 
 type argon2impl struct {
@@ -33,7 +42,7 @@ type argon2impl struct {
 	b64enc      base64.Encoding
 }
 
-// Create argon2 hash with default parameter
+// Create argon2 hash with default parameter. Compatible with nodejs library `github.com/ranisalt/node-argon2` if you set `memory = 65536` and `parallelism = 3` because default parameter of my lib is `memory = 4096` and `parallelism = 1`
 func NewArgon2() Argon2 {
 	result := &argon2impl{
 		delimiter:   "$",
@@ -45,7 +54,7 @@ func NewArgon2() Argon2 {
 		keyLen:      32,
 		memory:      (4 * 1024),
 		version:     argon2.Version,
-		b64enc:      *base64.StdEncoding.Strict(),
+		b64enc:      *base64.RawStdEncoding.Strict(),
 	}
 
 	return result
@@ -127,4 +136,19 @@ func (a *argon2impl) decodeKey(key []byte) (*argon2impl, []byte, error) {
 	arg.keyLen = uint32(len(key))
 
 	return arg, key, nil
+}
+
+func (a *argon2impl) SetMemory(memory uint32) Argon2 {
+	a.memory = memory
+	return a
+}
+
+func (a *argon2impl) SetIterations(iterations uint32) Argon2 {
+	a.iterations = iterations
+	return a
+}
+
+func (a *argon2impl) SetParallelism(parallelism uint8) Argon2 {
+	a.parallelism = parallelism
+	return a
 }
