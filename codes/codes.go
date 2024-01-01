@@ -125,6 +125,7 @@ const (
 	CodeArgon2EncodeHashError
 	CodeArgon2DecodeHashError
 	CodeArgon2IncompatibleVersion
+	CodeArgon2NotMatch
 	// Other codes
 )
 
