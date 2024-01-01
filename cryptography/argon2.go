@@ -2,8 +2,10 @@ package cryptography
 
 import (
 	"crypto/rand"
+	"crypto/subtle"
 	"encoding/base64"
 	"fmt"
+	"strings"
 
 	"github.com/irdaislakhuafa/go-sdk/codes"
 	"github.com/irdaislakhuafa/go-sdk/errors"
@@ -28,6 +30,7 @@ type argon2impl struct {
 	keyLen      uint32
 	memory      uint32
 	version     int
+	b64enc      base64.Encoding
 }
 
 // Create argon2 hash with default parameter
@@ -42,6 +45,7 @@ func NewArgon2() Argon2 {
 		keyLen:      32,
 		memory:      (4 * 1024),
 		version:     argon2.Version,
+		b64enc:      *base64.StdEncoding.Strict(),
 	}
 
 	return result
@@ -62,13 +66,65 @@ func (a *argon2impl) Hash(text []byte) (string, error) {
 }
 
 func (a *argon2impl) Compare(text []byte, hashedText []byte) (bool, error) {
-	panic("not implemented") // TODO: Implement
+	// extract all parameter include salt and key length from encoded argon2 hash
+	arg, key, err := a.decodeKey(hashedText)
+	if err != nil {
+		return false, err
+	}
+
+	// generate other hash with same parameters and compare it with existsing hash
+	otherKey := argon2.IDKey(text, arg.salt, arg.iterations, arg.memory, arg.parallelism, arg.keyLen)
+	if subtle.ConstantTimeCompare(key, otherKey) != 1 {
+		return false, errors.NewWithCode(codes.CodeArgon2NotMatch, "argon2 for plain text with hashed text is not match")
+	}
+
+	return true, nil
 }
 
 func (a *argon2impl) encodeKey(key []byte) (string, error) {
-	enc := base64.StdEncoding
-	base64Salt := enc.EncodeToString(a.salt)
-	base64Key := enc.EncodeToString(key)
+	base64Salt := a.b64enc.EncodeToString(a.salt)
+	base64Key := a.b64enc.EncodeToString(key)
 	encodedKey := fmt.Sprintf(a.hashFormat, a.version, a.memory, a.iterations, a.parallelism, base64Salt, base64Key)
 	return encodedKey, nil
+}
+
+func (a *argon2impl) decodeKey(key []byte) (*argon2impl, []byte, error) {
+	// split enncoded argon2 hash with delimiter
+	values := strings.Split(string(key), a.delimiter)
+
+	// compare length values with standard length
+	if lengthValue := len(values); lengthValue != int(a.lengthValue) {
+		return nil, nil, errors.NewWithCode(codes.CodeArgon2, "invalid length of encoded hash, expected %v but got %v", a.lengthValue, lengthValue)
+	}
+
+	// check argon2 version compatibility
+	version := 0
+	if _, err := fmt.Sscanf(values[2], "v=%v", &version); err != nil {
+		return nil, nil, errors.NewWithCode(codes.CodeArgon2, "failed to get argon2 version from hash text, %v", err)
+	}
+
+	if a.version != version {
+		return nil, nil, errors.NewWithCode(codes.CodeArgon2IncompatibleVersion, "current argon2 version is %v but encoded hash using version %v", a.version, version)
+	}
+
+	// mapping values for for memory, iterations and parallelism
+	arg := &argon2impl{}
+	if _, err := fmt.Sscanf(values[3], "m=%d,t=%d,p=%d", &arg.memory, &arg.iterations, &arg.parallelism); err != nil {
+		return nil, nil, errors.NewWithCode(codes.CodeArgon2, "failed to get memory, iterations and parallelism information from hash, %v", err)
+	}
+
+	// decode base64 salt
+	var err error
+	if arg.salt, err = a.b64enc.DecodeString(values[4]); err != nil {
+		return nil, nil, errors.NewWithCode(codes.CodeArgon2, "failed to decode salt information from hash, %v", err)
+	}
+
+	// decode base64 key
+	key, err = a.b64enc.DecodeString(values[5])
+	if err != nil {
+		return nil, nil, errors.NewWithCode(codes.CodeArgon2, "failed to decode key information from hash, %v", err)
+	}
+	arg.keyLen = uint32(len(key))
+
+	return arg, key, nil
 }
