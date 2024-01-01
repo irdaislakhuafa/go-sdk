@@ -42,7 +42,7 @@ type argon2impl struct {
 	b64enc      base64.Encoding
 }
 
-// Create argon2 hash with default parameter. Compatible with nodejs library `github.com/ranisalt/node-argon2` if you set `memory = 65536` and `parallelism = 3` because default parameter of my lib is `memory = 4096` and `parallelism = 1`
+// Create argon2 hash with default parameter. Compatible with nodejs library `https://github.com/ranisalt/node-argon2.git` if you set `memory = 65536` and `parallelism = 4` because default parameter of my lib is `memory = 4096` and `parallelism = 1`
 func NewArgon2() Argon2 {
 	result := &argon2impl{
 		delimiter:   "$",
