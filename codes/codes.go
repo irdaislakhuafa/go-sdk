@@ -14,15 +14,13 @@ const (
 	NoCode = math.MaxUint64
 )
 
-// General result error codes (1-1000)
 const (
+	// General result error codes (1-1000)
 	CodeSuccess = Code(iota + 1)
 	// Other codes
-)
 
-// Common error codes (1001-2000)
-const (
-	CodeInvalidValue = Code(iota + 1001)
+	// Common error codes
+	CodeInvalidValue
 	CodeContextDeadlineExceeded
 	CodeContextCanceled
 	CodeInternalServerError
@@ -36,11 +34,9 @@ const (
 	CodeMarshal
 	CodeUnmarshal
 	// Other codes
-)
 
-// SQL error codes (2001-3000)
-const (
-	CodeSQL = Code(iota + 2001)
+	// SQL error codes
+	CodeSQL
 	CodeSQLInit
 	CodeSQLBuilder
 	CodeSQLTxBegin
@@ -55,32 +51,26 @@ const (
 	CodeSQLConflict
 	CodeSQLNoRowsAffected
 	// Other codes
-)
 
-// Client error codes (3001-4000)
-const (
-	CodeClient = Code(iota + 3001)
+	// Client error codes
+	CodeClient
 	CodeClientMarshal
 	CodeClientUnmarshal
 	CodeClientErrorOnRequest
 	CodeClientErrorOnReadBody
 	// Other codes
-)
 
-// Auth error codes (4001-5000)
-const (
-	CodeAuth = Code(iota + 4001)
+	// Auth error codes
+	CodeAuth
 	CodeAuthRefreshTokenExpired
 	CodeAuthAccessTokenExpired
 	CodeAuthFailure
 	CodeAuthInvalidToken
 	CodeForbidden
 	// Other codes
-)
 
-// JSON encoding/decoding error codes (5001-6000)
-const (
-	CodeJSONSchema = Code(iota + 5001)
+	// JSON encoding/decoding error codes
+	CodeJSONSchema
 	CodeJSONSchemaInvalid
 	CodeJSONSchemaNotFound
 	CodeJSONStructInvalid
@@ -89,56 +79,48 @@ const (
 	CodeJSONMarshalError
 	CodeJSONUnmarshalError
 	// Other codes
-)
 
-// Storage error codes (6001-7000)
-const (
-	CodeStorage = Code(iota + 6001)
+	// Storage error codes
+	CodeStorage
 	CodeStorageNoFile
 	CodeStorageGenerateURLFailure
 	CodeStorageNoClient
 	// Other codes
-)
 
-// JWT error codes (7001-8000)
-const (
-	CodeJWT = Code(iota + 7001)
+	// JWT error codes
+	CodeJWT
 	CodeJWTInvalidMethod
 	CodeJWTParseWithClaimsError
 	CodeJWTInvalidClaimsType
 	CodeJWTSignedStringError
 	// Other codes
-)
 
-// GraphQL error codes (8001-9000)
-const (
-	CodeGQL = Code(iota + 8001)
+	// GraphQL error codes
+	CodeGQL
 	CodeGQLInvalidValue
 	CodeGQLBuilder
 	// Other codes
-)
 
-// Argon2 error codes (9001-10_000)
-const (
-	CodeArgon2 = Code(iota + 9001)
+	// Argon2 error codes
+	CodeArgon2
 	CodeArgon2InvalidEncodedHash
 	CodeArgon2EncodeHashError
 	CodeArgon2DecodeHashError
 	CodeArgon2IncompatibleVersion
 	CodeArgon2NotMatch
 	// Other codes
-)
 
-// aes 256 gcm error codes (10_001 - 11_000)
-const (
-	CodeAES256GCM = Code(iota + 10_001)
+	// Bcrypt error codes
+	CodeBcrypt
+	// Other codes
+
+	// AES 256 GCM error codes
+	CodeAES256GCM
 	CodeAES256GCMOpenError
 	// Other codes
-)
 
-// smtp error codes (11_001 - 12_000)
-const (
-	CodeSMTP = Code(iota + 11_001)
+	// SMTP error codes
+	CodeSMTP
 	CodeSMTPBadRequest
 	CodeSMTPRequestTimeout
 	// Other codes
