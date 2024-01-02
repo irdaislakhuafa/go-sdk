@@ -6,6 +6,12 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+const (
+	BcryptDefaultCost = bcrypt.DefaultCost
+	BcryptMaxCost     = bcrypt.MaxCost
+	BcryptMinCost     = bcrypt.MinCost
+)
+
 type Bcrypt interface {
 	// Hash plain text with bcrypt algoritm
 	Hash(plainText []byte) ([]byte, error)
@@ -13,7 +19,7 @@ type Bcrypt interface {
 	// Compare plain text with hashed text with bcrypt algorithm
 	Compare(plainText, hashedText []byte) error
 
-	// Set cost of bcrypt algoritm. By default using
+	// Set cost of bcrypt algoritm. By default using `cryptography.BcryptDefaultCost`
 	SetCost(cost int) Bcrypt
 
 	// Get cost used of this bcrypt algoritm
@@ -27,10 +33,10 @@ type bcryptimpl struct {
 	cost int
 }
 
-// Create new bcrypt based on `golang.org/x/crypto/bcrypt` by default using `cost = bcrypt.DefaultCost`
+// Create new bcrypt based on `golang.org/x/crypto/bcrypt` with default `cost` using `cryptography.BcryptDefaultCost`
 func NewBcrypt() Bcrypt {
 	result := &bcryptimpl{
-		cost: bcrypt.DefaultCost,
+		cost: BcryptDefaultCost,
 	}
 
 	return result
