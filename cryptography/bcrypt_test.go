@@ -51,10 +51,28 @@ func Test_Bcrypt(t *testing.T) {
 			wantErr:    wantErr{},
 		},
 		{
+			name:       "test bcrypt success with cost 10",
+			algFunc:    NewBcrypt().SetCost(10),
+			mode:       MODE_HASH,
+			param:      params{plainText: "password"},
+			isWantErr:  false,
+			wantResult: wantResult{},
+			wantErr:    wantErr{},
+		},
+		{
 			name:       "test compare success",
 			algFunc:    NewBcrypt(),
 			mode:       MODE_COMPARE,
 			param:      params{plainText: "password", hashedText: "$2a$10$3aElHMD12UI9BAhXSSwCqO0QhpUmy9koayt6EEz.N4SV6CeSJcJMu"},
+			isWantErr:  false,
+			wantResult: wantResult{isEqual: true},
+			wantErr:    wantErr{},
+		},
+		{
+			name:       "test compare success compatible with nodejs lib github.com/kelektiv/node.bcrypt.js",
+			algFunc:    NewBcrypt(),
+			mode:       MODE_COMPARE,
+			param:      params{plainText: "password", hashedText: "$2b$10$IBbySgCR.aXyx3ddeY4LNuoFP1QeqeJA36Y6RAz3gBz1pIpDyAayS"},
 			isWantErr:  false,
 			wantResult: wantResult{isEqual: true},
 			wantErr:    wantErr{},
@@ -104,6 +122,8 @@ func Test_Bcrypt(t *testing.T) {
 				} else {
 					if isEqual := (err == nil); isEqual != tt.wantResult.isEqual {
 						t.Fatalf("hashed text %#v is not equals with %#v", tt.param.hashedText, tt.param.plainText)
+					} else {
+						t.Logf("hashed text %#v is equals with %#v", tt.param.hashedText, tt.param.plainText)
 					}
 				}
 			}
