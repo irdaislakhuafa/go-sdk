@@ -124,6 +124,10 @@ const (
 	CodeSMTPBadRequest
 	CodeSMTPRequestTimeout
 	// Other codes
+
+	// Go Identiface codes (go lib based on https://github.com/Kagami/go-face.git to identify face)
+	CodeIdentiface
+	// Other codes
 )
 
 var codeMessages = map[Code](map[language.Language]Message){
