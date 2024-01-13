@@ -15,7 +15,7 @@ const (
 )
 
 const (
-	// General result error codes (1-1000)
+	// General result error codes
 	CodeSuccess = Code(iota + 1)
 	// Other codes
 
@@ -33,9 +33,11 @@ const (
 	CodeTooManyRequest
 	CodeMarshal
 	CodeUnmarshal
+	CodeCommonEnd
 	// Other codes
 
 	// SQL error codes
+	CodeSQLStart
 	CodeSQL
 	CodeSQLInit
 	CodeSQLBuilder
@@ -50,26 +52,32 @@ const (
 	CodeSQLUniqueConstraint
 	CodeSQLConflict
 	CodeSQLNoRowsAffected
+	CodeSQLEnd
 	// Other codes
 
 	// Client error codes
+	CodeClientStart
 	CodeClient
 	CodeClientMarshal
 	CodeClientUnmarshal
 	CodeClientErrorOnRequest
 	CodeClientErrorOnReadBody
+	CodeClientEnd
 	// Other codes
 
 	// Auth error codes
+	CodeAuthStart
 	CodeAuth
 	CodeAuthRefreshTokenExpired
 	CodeAuthAccessTokenExpired
 	CodeAuthFailure
 	CodeAuthInvalidToken
 	CodeForbidden
+	CodeAuthEnd
 	// Other codes
 
 	// JSON encoding/decoding error codes
+	CodeJSONSchemaStart
 	CodeJSONSchema
 	CodeJSONSchemaInvalid
 	CodeJSONSchemaNotFound
@@ -78,55 +86,72 @@ const (
 	CodeJSONValidationError
 	CodeJSONMarshalError
 	CodeJSONUnmarshalError
+	CodeJSONSchemaEnd
 	// Other codes
 
 	// Storage error codes
+	CodeStorageStart
 	CodeStorage
 	CodeStorageNoFile
 	CodeStorageGenerateURLFailure
 	CodeStorageNoClient
+	CodeStorageEnd
 	// Other codes
 
 	// JWT error codes
+	CodeJWTStart
 	CodeJWT
 	CodeJWTInvalidMethod
 	CodeJWTParseWithClaimsError
 	CodeJWTInvalidClaimsType
 	CodeJWTSignedStringError
+	CodeJWTEnd
 	// Other codes
 
 	// GraphQL error codes
+	CodeGQLStart
 	CodeGQL
 	CodeGQLInvalidValue
 	CodeGQLBuilder
+	CodeGQLEnd
 	// Other codes
 
 	// Argon2 error codes
+	CodeArgon2Start
 	CodeArgon2
 	CodeArgon2InvalidEncodedHash
 	CodeArgon2EncodeHashError
 	CodeArgon2DecodeHashError
 	CodeArgon2IncompatibleVersion
 	CodeArgon2NotMatch
+	CodeArgon2End
 	// Other codes
 
 	// Bcrypt error codes
+	CodeBcryptStart
 	CodeBcrypt
+	CodeBcryptEnd
 	// Other codes
 
 	// AES 256 GCM error codes
+	CodeAES256GCMStart
 	CodeAES256GCM
 	CodeAES256GCMOpenError
+	CodeAES256GCMEnd
 	// Other codes
 
 	// SMTP error codes
+	CodeSMTPStart
 	CodeSMTP
 	CodeSMTPBadRequest
 	CodeSMTPRequestTimeout
+	CodeSMTPEnd
 	// Other codes
 
 	// Go Identiface codes (go lib based on https://github.com/Kagami/go-face.git to identify face)
+	CodeIdentifaceStart
 	CodeIdentiface
+	CodeIdentifaceEnd
 	// Other codes
 )
 
