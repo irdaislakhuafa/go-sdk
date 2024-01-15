@@ -22,7 +22,7 @@ type jwtimpl[C jwt.Claims] struct {
 	signingMethod jwt.SigningMethod
 }
 
-func Init[C jwt.Claims](secretKey []byte, claims C) JWTInterface[C] {
+func InitJWT[C jwt.Claims](secretKey []byte, claims C) JWTInterface[C] {
 	j := jwtimpl[C]{
 		secretKey:     secretKey,
 		claims:        claims,
