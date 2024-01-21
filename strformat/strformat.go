@@ -1,6 +1,10 @@
 package strformat
 
-import "regexp"
+import (
+	"bytes"
+	"regexp"
+	"text/template"
+)
 
 // Check string value, will return `true` if string value is only number and return `false` if string value not only contains number
 func IsOnlyNumber(s string) bool {
@@ -10,4 +14,18 @@ func IsOnlyNumber(s string) bool {
 		return false
 	}
 	return matched
+}
+
+func Tmpl(tmplFormat string, values any) (string, error) {
+	tmpl, err := template.New("").Parse(tmplFormat)
+	if err != nil {
+		return "", err
+	}
+
+	buff := bytes.Buffer{}
+	if err := tmpl.Execute(&buff, values); err != nil {
+		return "", err
+	}
+
+	return buff.String(), nil
 }

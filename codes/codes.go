@@ -153,6 +153,13 @@ const (
 	CodeIdentiface
 	CodeIdentifaceEnd
 	// Other codes
+
+	// Go string template codes
+	CodeStrTemplateStart
+	CodeStrTemplateInvalidFormat
+	CodeStrTemplateInvalidValue
+	CodeStrTemplateEnd
+	// Other codes
 )
 
 var codeMessages = map[Code](map[language.Language]Message){
