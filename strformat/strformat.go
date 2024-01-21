@@ -16,8 +16,8 @@ func IsOnlyNumber(s string) bool {
 	return matched
 }
 
-func Tmpl(textTemplate string, values any) (string, error) {
-	tmpl, err := template.New("").Parse(textTemplate)
+func Tmpl(tmplFormat string, values any) (string, error) {
+	tmpl, err := template.New("").Parse(tmplFormat)
 	if err != nil {
 		return "", err
 	}
