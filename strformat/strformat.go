@@ -32,8 +32,3 @@ func Tmpl(tmplFormat string, values any) (string, error) {
 
 	return buff.String(), nil
 }
-
-func TmplWithoutErr(tmplFormat string, values any) string {
-	result, _ := Tmpl(tmplFormat, values)
-	return result
-}
