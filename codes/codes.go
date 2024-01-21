@@ -151,13 +151,17 @@ const (
 	// Go Identiface codes (go lib based on https://github.com/Kagami/go-face.git to identify face)
 	CodeIdentifaceStart
 	CodeIdentiface
+	CodeIdentifaceNoFaceDetected
+	CodeIdentifaceFaceNotRecognized
+	CodeIdentifaceMultipleFaceDetected
+	CodeIdentifaceFaceNotRegistered
 	CodeIdentifaceEnd
 	// Other codes
 
 	// Go string template codes
 	CodeStrTemplateStart
 	CodeStrTemplateInvalidFormat
-	CodeStrTemplateInvalidValue
+	CodeStrTemplateExecuteErr
 	CodeStrTemplateEnd
 	// Other codes
 )
