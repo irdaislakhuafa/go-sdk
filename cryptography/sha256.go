@@ -4,9 +4,11 @@ import (
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/hex"
+	"hash"
 
 	"github.com/irdaislakhuafa/go-sdk/codes"
 	"github.com/irdaislakhuafa/go-sdk/errors"
+	"github.com/irdaislakhuafa/go-sdk/operator"
 )
 
 type SHA256[T any] interface {
@@ -30,19 +32,11 @@ func NewSHA256(text []byte) SHA256[sha256impl] {
 }
 
 func (s *sha256impl) Build() (string, error) {
-	if s.key == nil {
-		hash := sha256.New()
-		if _, err := hash.Write(s.text); err != nil {
-			return "", errors.NewWithCode(codes.CodeInvalidValue, "failed to write value to hash, %v", err)
-		}
-		return hex.EncodeToString(hash.Sum(nil)), nil
-	} else {
-		hash := hmac.New(sha256.New, s.key)
-		if _, err := hash.Write(s.text); err != nil {
-			return "", errors.NewWithCode(codes.CodeInvalidValue, "failed to write value to hash, %v", err)
-		}
-		return hex.EncodeToString(hash.Sum(nil)), nil
+	hash := operator.Ternary[hash.Hash](s.key == nil, sha256.New(), hmac.New(sha256.New, s.key))
+	if _, err := hash.Write(s.text); err != nil {
+		return "", errors.NewWithCode(codes.CodeInvalidValue, "failed to write value to hash, %v", err)
 	}
+	return hex.EncodeToString(hash.Sum(nil)), nil
 }
 
 func (s *sha256impl) WithKey(key []byte) *sha256impl {
