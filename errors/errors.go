@@ -73,12 +73,15 @@ func create(cause error, code codes.Code, msg string, val ...any) error {
 	}
 
 	err := &stacktrace{
-		message: fmt.Sprintf(msg, val...),
-		cause:   cause,
-		code:    code,
+		message:  fmt.Sprintf(msg, val...),
+		cause:    cause,
+		code:     code,
+		file:     "",
+		function: "",
+		line:     0,
 	}
 
-	pc, file, line, isOk := runtime.Caller(2)
+	pc, file, line, isOk := runtime.Caller(1)
 	if !isOk {
 		return err
 	}
