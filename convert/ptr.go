@@ -7,6 +7,7 @@ func ToPointer[T any](value T) *T {
 	return &value
 }
 
+// Convert any value to `T` data type and if value is not valid or `nil`, will use default value of `T` (null/nil safety) as return value
 func ToSafeValue[T any](value any) T {
 	rv := reflect.ValueOf(value)
 	for rv.Kind() == reflect.Pointer {

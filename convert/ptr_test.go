@@ -86,9 +86,14 @@ func Test_ToSafeValue(t *testing.T) {
 			want:   want{value: exampleStruct{}},
 		},
 		{
-			name:   "struct ptr value 'str'",
+			name:   "struct ptr value",
 			params: params{dataType: STRUCT, value: ToPointer(exampleStruct{Anything: "haha"})},
 			want:   want{value: exampleStruct{Anything: "haha"}},
+		},
+		{
+			name:   "struct ptr value empty str",
+			params: params{dataType: STRUCT, value: ToPointer("")},
+			want:   want{value: exampleStruct{}},
 		},
 	}
 
