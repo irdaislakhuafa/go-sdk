@@ -71,6 +71,11 @@ func Test_ToSafeValue(t *testing.T) {
 			want:   want{value: 10},
 		},
 		{
+			name:   "int ptr ptr value 10",
+			params: params{dataType: INT, value: ToPointer(ToPointer(10))},
+			want:   want{value: 10},
+		},
+		{
 			name:   "string ptr",
 			params: params{dataType: STRING, value: nil},
 			want:   want{value: ""},
