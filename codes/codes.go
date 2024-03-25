@@ -164,6 +164,12 @@ const (
 	CodeStrTemplateExecuteErr
 	CodeStrTemplateEnd
 	// Other codes
+
+	// Go Queue codes
+	CodeQueueEmpty
+	CodeQueueFull
+	// Other codes
+
 )
 
 var codeMessages = map[Code](map[language.Language]Message){
