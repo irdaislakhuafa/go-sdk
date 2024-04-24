@@ -1,6 +1,6 @@
 module github.com/irdaislakhuafa/go-sdk
 
-go 1.20
+go 1.21
 
 require (
 	github.com/go-mail/gomail v2.3.1+incompatible
