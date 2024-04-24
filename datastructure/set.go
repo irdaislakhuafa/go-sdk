@@ -9,6 +9,7 @@ type SetInterface[E comparable] interface {
 	IsExists(value E) bool
 	Del(values ...E)
 	Slice() []E
+	Clear()
 }
 
 func NewSet[E comparable](values ...E) SetInterface[E] {
@@ -46,4 +47,8 @@ func (s *Set[E]) Slice() []E {
 		results = append(results, v)
 	}
 	return results
+}
+
+func (s *Set[E]) Clear() {
+	clear(s.Values)
 }
