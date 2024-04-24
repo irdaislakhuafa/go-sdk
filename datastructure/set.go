@@ -12,6 +12,7 @@ type SetInterface[E comparable] interface {
 	Clear()
 }
 
+// Set data type is like `slice` or `array` but without duplicate element and set element is unordered element
 func NewSet[E comparable](values ...E) SetInterface[E] {
 	set := Set[E]{
 		Values: map[E]bool{},
