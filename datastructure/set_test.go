@@ -15,8 +15,7 @@ func Test_Set(t *testing.T) {
 		}
 
 		want struct {
-			contains string
-			equals   string
+			equals string
 		}
 
 		test struct {
@@ -39,8 +38,8 @@ func Test_Set(t *testing.T) {
 	tests := []test{
 		{
 			name: "set slice",
-			mode: MODE_ADD,
-			want: want{contains: "D", equals: strings.Join([]string{"A", "B", "C", "D", "E"}, ",")},
+			mode: MODE_SLICE,
+			want: want{equals: strings.Join([]string{"A", "B", "C"}, ",")},
 			beforeFunc: func(_ SetInterface[string]) SetInterface[string] {
 				return NewSet("A", "B", "C")
 			},
@@ -49,7 +48,25 @@ func Test_Set(t *testing.T) {
 			name: "set add",
 			mode: MODE_ADD,
 			args: args{values: []string{"D", "E"}},
-			want: want{contains: "D", equals: strings.Join([]string{"A", "B", "C", "D", "E"}, ",")},
+			want: want{equals: strings.Join([]string{"A", "B", "C", "D", "E"}, ",")},
+			beforeFunc: func(_ SetInterface[string]) SetInterface[string] {
+				return NewSet("A", "B", "C")
+			},
+		},
+		{
+			name: "set delete",
+			mode: MODE_DELETE,
+			args: args{values: []string{"A", "B"}},
+			want: want{equals: strings.Join([]string{"C"}, ",")},
+			beforeFunc: func(_ SetInterface[string]) SetInterface[string] {
+				return NewSet("A", "B", "C")
+			},
+		},
+		{
+			name: "set exists",
+			mode: MODE_EXISTS,
+			args: args{value: "A"},
+			want: want{equals: "true"},
 			beforeFunc: func(_ SetInterface[string]) SetInterface[string] {
 				return NewSet("A", "B", "C")
 			},
