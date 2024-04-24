@@ -5,9 +5,9 @@ type Set[E comparable] struct {
 }
 
 type SetInterface[E comparable] interface {
-	Add(value E)
+	Add(values ...E)
 	IsExists(value E) bool
-	Del(value E)
+	Del(values ...E)
 	Slice() []E
 }
 
@@ -23,8 +23,10 @@ func NewSet[E comparable](values ...E) SetInterface[E] {
 	return &set
 }
 
-func (s *Set[E]) Add(value E) {
-	s.Values[value] = true
+func (s *Set[E]) Add(values ...E) {
+	for _, v := range values {
+		s.Values[v] = true
+	}
 }
 
 func (s *Set[E]) IsExists(value E) bool {
@@ -32,8 +34,10 @@ func (s *Set[E]) IsExists(value E) bool {
 	return isExists
 }
 
-func (s *Set[E]) Del(value E) {
-	delete(s.Values, value)
+func (s *Set[E]) Del(values ...E) {
+	for _, v := range values {
+		delete(s.Values, v)
+	}
 }
 
 func (s *Set[E]) Slice() []E {
