@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strings"
 	"testing"
+
+	"github.com/irdaislakhuafa/go-sdk/collections"
 )
 
 func Test_Set(t *testing.T) {
@@ -83,8 +85,8 @@ func Test_Set(t *testing.T) {
 			switch tt.mode {
 			case MODE_ADD:
 				set.Add(tt.args.values...)
-				if results := strings.Join(set.Slice(), ","); results != tt.want.equals {
-					t.Fatalf("mode add with values '%v' want '%v' but got '%v'", tt.args.values, tt.want.equals, results)
+				if want := strings.Split(tt.want.equals, ","); !collections.IsElementsEquals(want, set.Slice()) {
+					t.Fatalf("mode add with values '%v' want '%v' but got '%v'", tt.args.values, want, set.Slice())
 				}
 			case MODE_EXISTS:
 				isExists := set.IsExists(tt.args.value)
@@ -97,8 +99,8 @@ func Test_Set(t *testing.T) {
 					t.Fatalf("mode delete with values '%v' want '%v' but got '%v'", tt.args.values, tt.want.equals, results)
 				}
 			case MODE_SLICE:
-				if results := strings.Join(set.Slice(), ","); results != tt.want.equals {
-					t.Fatalf("mode slice want '%v' but got '%v'", tt.want.equals, results)
+				if want := strings.Split(tt.want.equals, ","); !collections.IsElementsEquals(want, set.Slice()) {
+					t.Fatalf("mode slice want '%v' but got '%v'", want, set.Slice())
 				}
 			}
 
