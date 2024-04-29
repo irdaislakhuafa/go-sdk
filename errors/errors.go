@@ -82,7 +82,7 @@ func create(cause error, code codes.Code, msg string, val ...any) error {
 		line:     0,
 	}
 
-	pc, file, line, isOk := runtime.Caller(1)
+	pc, file, line, isOk := runtime.Caller(2)
 	if !isOk {
 		return err
 	}
