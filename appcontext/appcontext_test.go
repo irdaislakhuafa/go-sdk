@@ -35,7 +35,7 @@ func Test_Appcontext_acceptLanguage(t *testing.T) {
 			name: "test SetAcceptLanguage success",
 			mode: SET,
 			args: args{ctx: context.Background(), lang: language.Indonesian},
-			want: want{value: context.WithValue(context.Background(), acceptLanguage, language.Indonesian)},
+			want: want{value: context.WithValue(context.Background(), AcceptLanguage, language.Indonesian)},
 		},
 		{
 			name: "test GetAcceptLanguage success with default language",
