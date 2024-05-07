@@ -10,6 +10,8 @@ type SetInterface[E comparable] interface {
 	Del(values ...E)
 	Slice() []E
 	Clear()
+	IsEmpty() bool
+	Size() int
 }
 
 // Set data type is like `slice` or `array` but without duplicate element and set element is unordered element
@@ -52,4 +54,12 @@ func (s *Set[E]) Slice() []E {
 
 func (s *Set[E]) Clear() {
 	clear(s.Values)
+}
+
+func (s *Set[E]) IsEmpty() bool {
+	return len(s.Values) == 0
+}
+
+func (s *Set[E]) Size() int {
+	return len(s.Values)
 }
