@@ -23,6 +23,7 @@ type Interface interface {
 	Warn(ctx context.Context, obj interface{})
 	Error(ctx context.Context, obj interface{})
 	Fatal(ctx context.Context, obj interface{})
+	WithCtxFields(funcCtxField func(ctx context.Context) map[string]any) Interface
 }
 
 type Config struct {
@@ -30,7 +31,8 @@ type Config struct {
 }
 
 type logger struct {
-	log zerolog.Logger
+	log           zerolog.Logger
+	funcCtxFields func(ctx context.Context) map[string]any
 }
 
 const (
@@ -58,37 +60,37 @@ func Init(cfg Config) Interface {
 
 func (l *logger) Trace(ctx context.Context, obj interface{}) {
 	l.log.Trace().
-		Fields(getContextFields(ctx)).
+		Fields(l.getContextFields(ctx)).
 		Msg(fmt.Sprint(GetCaller(obj)))
 }
 
 func (l *logger) Debug(ctx context.Context, obj interface{}) {
 	l.log.Debug().
-		Fields(getContextFields(ctx)).
+		Fields(l.getContextFields(ctx)).
 		Msg(fmt.Sprint(GetCaller(obj)))
 }
 
 func (l *logger) Info(ctx context.Context, obj interface{}) {
 	l.log.Info().
-		Fields(getContextFields(ctx)).
+		Fields(l.getContextFields(ctx)).
 		Msg(fmt.Sprint(GetCaller(obj)))
 }
 
 func (l *logger) Warn(ctx context.Context, obj interface{}) {
 	l.log.Warn().
-		Fields(getContextFields(ctx)).
+		Fields(l.getContextFields(ctx)).
 		Msg(fmt.Sprint(GetCaller(obj)))
 }
 
 func (l *logger) Error(ctx context.Context, obj interface{}) {
 	l.log.Error().
-		Fields(getContextFields(ctx)).
+		Fields(l.getContextFields(ctx)).
 		Msg(fmt.Sprint(GetCaller(obj)))
 }
 
 func (l *logger) Fatal(ctx context.Context, obj interface{}) {
 	l.log.Fatal().
-		Fields(getContextFields(ctx)).
+		Fields(l.getContextFields(ctx)).
 		Msg(fmt.Sprint(GetCaller(obj)))
 }
 
@@ -107,12 +109,16 @@ func GetCaller(value any) any {
 	}
 }
 
-func getContextFields(ctx context.Context) map[string]any {
+func (l *logger) getContextFields(ctx context.Context) map[string]any {
 	reqStartTime := appcontext.GetRequestStartTime(ctx)
 	timeElapsed := "0ms"
 
 	if !reqStartTime.IsZero() {
 		timeElapsed = fmt.Sprintf("%dms", uint64(time.Since(reqStartTime)/time.Millisecond))
+	}
+
+	if l.funcCtxFields != nil {
+		return l.funcCtxFields(ctx)
 	}
 
 	return map[string]any{
@@ -121,4 +127,9 @@ func getContextFields(ctx context.Context) map[string]any {
 		"service_version": appcontext.GetServiceVersion(ctx),
 		"time_elapsed":    timeElapsed,
 	}
+}
+
+func (l *logger) WithCtxFields(funcCtxField func(ctx context.Context) map[string]any) Interface {
+	l.funcCtxFields = funcCtxField
+	return l
 }
