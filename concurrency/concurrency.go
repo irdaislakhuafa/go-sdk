@@ -16,10 +16,10 @@ type Interface interface {
 	// Set maximum worker here. Default is 1
 	WithMaxWorker(maxWorker int64) Interface
 
-	// Call c.Done() after process is complete. This like wg.Done()
+	// Run the list functions with goroutine
 	Do(ctx context.Context) error
 
-	// Added function that will be run async at goroutine
+	// Added function that will be run async at goroutine. Call c.Done() after process is complete
 	AddFunc(fn func(ctx context.Context, c Interface))
 
 	// Lock block of code. This like mt.Lock()
