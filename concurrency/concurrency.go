@@ -31,7 +31,7 @@ type Interface interface {
 	// To flag wait group if proccess is done. This like wg.Done()
 	Done()
 
-	// Added errors if have error. The error will be returned at Do() method if exists
+	// Added errors if have error. The error will be returned at Do() method if exists. Recommended to use errors.NewWithCode()
 	AddError(errs ...error)
 }
 
