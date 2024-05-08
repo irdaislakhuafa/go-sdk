@@ -35,6 +35,7 @@ func Test_Set(t *testing.T) {
 		MODE_EXISTS
 		MODE_DELETE
 		MODE_SLICE
+		MODE_DELETE_IF
 	)
 
 	tests := []test{
@@ -73,6 +74,17 @@ func Test_Set(t *testing.T) {
 				return NewSet("A", "B", "C")
 			},
 		},
+		{
+			name: "delete if",
+			mode: MODE_DELETE_IF,
+			args: args{value: "A"},
+			want: want{equals: "A,B"},
+			beforeFunc: func(_ SetInterface[string]) SetInterface[string] {
+				s := NewSet("A", "B", "C")
+				s.DelIf(func(value string) bool { return value == "C" })
+				return s
+			},
+		},
 	}
 
 	for _, tt := range tests {
@@ -101,6 +113,10 @@ func Test_Set(t *testing.T) {
 			case MODE_SLICE:
 				if want := strings.Split(tt.want.equals, ","); !collections.IsElementsEquals(want, set.Slice()) {
 					t.Fatalf("mode slice want '%v' but got '%v'", want, set.Slice())
+				}
+			case MODE_DELETE_IF:
+				if want := strings.Split(tt.want.equals, ","); !collections.IsElementsEquals(want, set.Slice()) {
+					t.Fatalf("mode delete if want '%v' but got '%v'", want, set.Slice())
 				}
 			}
 
