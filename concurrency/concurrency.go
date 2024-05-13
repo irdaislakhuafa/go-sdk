@@ -33,6 +33,9 @@ type Interface interface {
 
 	// Added errors if have error. This method already implement c.Lock() and c.Unlock(). The error will be returned at Do() method if exists. Recommended to use errors.NewWithCode()
 	AddError(errs ...error)
+
+	// To clear list functions
+	ClearFunc()
 }
 
 type concurrency struct {
@@ -85,6 +88,7 @@ func (c *concurrency) Do(ctx context.Context) error {
 		}
 	}
 
+	c.ClearFunc()
 	return nil
 }
 
@@ -106,8 +110,13 @@ func (c *concurrency) Unlock() {
 func (c *concurrency) Done() {
 	c.wg.Done()
 }
+
 func (c *concurrency) AddError(errs ...error) {
 	c.Lock()
 	c.listErr = append(c.listErr, errs...)
 	c.Unlock()
+}
+
+func (c *concurrency) ClearFunc() {
+	c.listFunc = nil
 }
