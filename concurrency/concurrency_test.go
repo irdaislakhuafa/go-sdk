@@ -52,7 +52,9 @@ func Test_Concurrency(t *testing.T) {
 				})
 			}
 			if err := c.Do(ctx); err != nil {
-				t.Fatalf("want err code '%v' but got '%v'", tt.want.errCode, errors.GetCode(err))
+				if code := errors.GetCode(err); code.IsNotOneOf(tt.want.errCode) {
+					t.Fatalf("want err code '%v' but got '%v'", tt.want.errCode, errors.GetCode(err))
+				}
 			}
 
 			for index := range tt.want.intValues[len(tt.want.intValues)/2:] {
@@ -67,7 +69,9 @@ func Test_Concurrency(t *testing.T) {
 			}
 
 			if err := c.Do(ctx); err != nil {
-				t.Fatalf("want err code '%v' but got '%v'", tt.want.errCode, errors.GetCode(err))
+				if code := errors.GetCode(err); code.IsNotOneOf(tt.want.errCode) {
+					t.Fatalf("want err code '%v' but got '%v'", tt.want.errCode, errors.GetCode(err))
+				}
 			}
 
 			if !collections.IsElementsEquals(tt.want.intValues, intValues) {
