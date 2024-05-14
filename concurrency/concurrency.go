@@ -11,7 +11,7 @@ type Interface interface {
 	WithWg(wg *sync.WaitGroup) Interface
 
 	// Use your custom sync.Mutex
-	WithMt(mt *sync.Mutex) Interface
+	WithLocker(lc sync.Locker) Interface
 
 	// Set maximum worker here. Default is 1
 	WithMaxWorker(maxWorker int64) Interface
@@ -40,7 +40,7 @@ type Interface interface {
 
 type concurrency struct {
 	wg        *sync.WaitGroup
-	mt        *sync.Mutex
+	lc        sync.Locker
 	maxWorker int64
 	listErr   []error
 	listFunc  []func(ctx context.Context, c Interface)
@@ -50,7 +50,7 @@ type concurrency struct {
 func NewConcurrency() Interface {
 	result := concurrency{
 		wg:        &sync.WaitGroup{},
-		mt:        &sync.Mutex{},
+		lc:        &sync.Mutex{},
 		maxWorker: 1,
 	}
 	return &result
@@ -61,8 +61,8 @@ func (c *concurrency) WithWg(wg *sync.WaitGroup) Interface {
 	return c
 }
 
-func (c *concurrency) WithMt(mt *sync.Mutex) Interface {
-	c.mt = mt
+func (c *concurrency) WithLocker(lc sync.Locker) Interface {
+	c.lc = lc
 	return c
 }
 
@@ -100,11 +100,11 @@ func (c *concurrency) AddFunc(fn func(ctx context.Context, c Interface)) {
 }
 
 func (c *concurrency) Lock() {
-	c.mt.Lock()
+	c.lc.Lock()
 }
 
 func (c *concurrency) Unlock() {
-	c.mt.Unlock()
+	c.lc.Unlock()
 }
 
 func (c *concurrency) Done() {

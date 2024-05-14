@@ -32,7 +32,7 @@ func Test_Concurrency(t *testing.T) {
 	tests := []test{
 		{
 			name: "concurrency get data",
-			args: args{worker: 2, process: 10},
+			args: args{worker: 10, process: 10},
 			want: want{intValues: []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, errCode: codes.NoCode},
 		},
 	}
