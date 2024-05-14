@@ -16,7 +16,7 @@ type Interface interface {
 	// Set maximum worker here. Default is 1
 	WithMaxWorker(maxWorker int64) Interface
 
-	// Run the list functions with goroutine
+	// Run the list functions with goroutine. The list method will be cleared after calling this method.
 	Do(ctx context.Context) error
 
 	// Added function that will be run async at goroutine. This method already call c.Done() after process is complete
