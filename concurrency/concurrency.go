@@ -10,7 +10,7 @@ type Interface interface {
 	// Use your custom sync.WaitGroup
 	WithWg(wg *sync.WaitGroup) Interface
 
-	// Use your custom sync.Mutex
+	// Use your custom sync.Locker
 	WithLocker(lc sync.Locker) Interface
 
 	// Set maximum worker here. Default is 1
@@ -22,10 +22,10 @@ type Interface interface {
 	// Added function that will be run async at goroutine. This method already call c.Done() after process is complete
 	AddFunc(fn func(ctx context.Context, c Interface))
 
-	// Lock block of code. This like mt.Lock()
+	// Lock block of code. This like (sync.Mutex{}).Lock()
 	Lock()
 
-	// Unlock block of code. This like mt.Unlock()
+	// Unlock block of code. This like (sync.Mutex{}).Unlock()
 	Unlock()
 
 	// To flag wait group if proccess is done. This like wg.Done()
