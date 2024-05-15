@@ -99,7 +99,7 @@ func GetCaller(value any) any {
 	case error:
 		file, line, message, err := errors.GetCaller(tErr)
 		if err != nil {
-			return fmt.Sprintf("error cannot get caller, %v", err)
+			return fmt.Sprintf("%v", err)
 		}
 		return fmt.Sprintf("%s:%#v --- %s", file, line, message)
 	case string:
