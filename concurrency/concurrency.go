@@ -36,6 +36,9 @@ type Interface interface {
 
 	// To clear list functions
 	ClearFunc()
+
+	// Get value of maximum worker
+	GetMaxWorker() int64
 }
 
 type concurrency struct {
@@ -119,4 +122,8 @@ func (c *concurrency) AddError(errs ...error) {
 
 func (c *concurrency) ClearFunc() {
 	c.listFunc = nil
+}
+
+func (c *concurrency) GetMaxWorker() int64 {
+	return c.maxWorker
 }
