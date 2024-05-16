@@ -39,6 +39,9 @@ type Interface interface {
 
 	// Get value of maximum worker
 	GetMaxWorker() int64
+
+	// Create clone object of this concurrency with empty list function or etc but with same max worker
+	Clone() Interface
 }
 
 type concurrency struct {
@@ -126,4 +129,8 @@ func (c *concurrency) ClearFunc() {
 
 func (c *concurrency) GetMaxWorker() int64 {
 	return c.maxWorker
+}
+
+func (c *concurrency) Clone() Interface {
+	return NewConcurrency().WithMaxWorker(c.maxWorker)
 }
