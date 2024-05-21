@@ -28,6 +28,9 @@ type SetInterface[E comparable] interface {
 
 	// Delete element from set if condition is matched.
 	DelIf(condition func(value E) bool) SetInterface[E]
+
+	// Filter elements of set. Will return new set with filtered elements.
+	Filter(condition func(value E) bool) SetInterface[E]
 }
 
 // Set data type is like `slice` or `array` but without duplicate element and set element is unordered element
@@ -88,4 +91,18 @@ func (s *Set[E]) DelIf(condition func(value E) bool) SetInterface[E] {
 	}
 
 	return s
+}
+
+func (s *Set[E]) Filter(condition func(value E) bool) SetInterface[E] {
+	var s1 SetInterface[E] = &Set[E]{
+		values: map[E]bool{},
+	}
+
+	for v := range s.values {
+		if condition(v) {
+			s1.Add(v)
+		}
+	}
+
+	return s1
 }
