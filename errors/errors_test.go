@@ -41,7 +41,7 @@ func Test_GetCaller(t *testing.T) {
 			args: args{err: NewWithCode(codes.CodeBadRequest, "bad request")},
 			wantResult: wantResult{
 				file:    files.GetCurrentFileLocation(), // NOTE: this is line where error created with function NewWithCode
-				line:    37,
+				line:    41,
 				message: "bad request",
 			},
 			wantErr: wantErr{isWanted: false},
@@ -56,7 +56,7 @@ func Test_GetCaller(t *testing.T) {
 			},
 			wantErr: wantErr{
 				isWanted: true,
-				errMsg:   "failed to cast error to stacktrace",
+				errMsg:   "pure error",
 			},
 		},
 	}
