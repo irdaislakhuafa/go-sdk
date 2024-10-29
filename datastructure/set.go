@@ -1,7 +1,12 @@
 package datastructure
 
+import (
+	"github.com/irdaislakhuafa/go-sdk/codes"
+	"github.com/irdaislakhuafa/go-sdk/errors"
+)
+
 type Set[E comparable] struct {
-	values map[E]bool
+	values map[E]struct{}
 }
 
 type SetInterface[E comparable] interface {
@@ -31,24 +36,23 @@ type SetInterface[E comparable] interface {
 
 	// Filter elements of set. Will return new set with filtered elements.
 	Filter(condition func(value E) bool) SetInterface[E]
+
+	// Find first element in set that matches condition or return error with code `github.com/irdaislakhuafa/go-sdk/codes.CodeNotFound`.
+	Find(condition func(value E) bool) (E, error)
 }
 
 // Set data type is like `slice` or `array` but without duplicate element and set element is unordered element
 func NewSet[E comparable](values ...E) SetInterface[E] {
 	set := Set[E]{
-		values: map[E]bool{},
+		values: map[E]struct{}{},
 	}
-
-	for _, v := range values {
-		set.values[v] = true
-	}
-
+	set.Add(values...)
 	return &set
 }
 
 func (s *Set[E]) Add(values ...E) {
 	for _, v := range values {
-		s.values[v] = true
+		s.values[v] = struct{}{}
 	}
 }
 
@@ -94,10 +98,7 @@ func (s *Set[E]) DelIf(condition func(value E) bool) SetInterface[E] {
 }
 
 func (s *Set[E]) Filter(condition func(value E) bool) SetInterface[E] {
-	var s1 SetInterface[E] = &Set[E]{
-		values: map[E]bool{},
-	}
-
+	var s1 SetInterface[E] = NewSet[E]()
 	for v := range s.values {
 		if condition(v) {
 			s1.Add(v)
@@ -105,4 +106,13 @@ func (s *Set[E]) Filter(condition func(value E) bool) SetInterface[E] {
 	}
 
 	return s1
+}
+
+func (s *Set[E]) Find(condition func(value E) bool) (E, error) {
+	for v := range s.values {
+		if condition(v) {
+			return v, nil
+		}
+	}
+	return *(new(E)), errors.NewWithCode(codes.CodeNotFound, "element not found")
 }
