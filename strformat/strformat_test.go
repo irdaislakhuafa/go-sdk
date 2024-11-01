@@ -46,8 +46,8 @@ func Test_IsOnlyNumber(t *testing.T) {
 func Test_Tmpl(t *testing.T) {
 	type (
 		args struct {
-			strTmpl string
 			value   any
+			strTmpl string
 		}
 
 		want struct {
@@ -88,7 +88,7 @@ func Test_Tmpl(t *testing.T) {
 	f := files.GetCurrentMethodName()
 	for _, tt := range tests {
 		t.Run(fmt.Sprintf("%v:%v", f, tt.name), func(t *testing.T) {
-			result, err := Tmpl(tt.args.strTmpl, tt.args.value)
+			result, err := T(tt.args.strTmpl, tt.args.value)
 			if tt.isWantErr {
 				if err == nil {
 					t.Fatalf("want err is %#v but got err with msg %#v", tt.isWantErr, err)
@@ -97,7 +97,6 @@ func Test_Tmpl(t *testing.T) {
 						t.Fatalf("want err code is %#v but got err code %#v", tt.wantErr.code, code)
 					}
 				}
-
 			}
 
 			if result != tt.want.result {
