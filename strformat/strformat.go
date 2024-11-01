@@ -39,3 +39,9 @@ func TmplWithoutErr(tmplFormat string, values any) string {
 	result, _ := Tmpl(tmplFormat, values)
 	return result
 }
+
+// Alias of `strformat.Tmpl`
+var T = Tmpl
+
+// Alias of `strformat.TmplWithoutErr`
+var TE = TmplWithoutErr
