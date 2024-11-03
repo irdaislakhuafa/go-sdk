@@ -44,4 +44,4 @@ func TmplWithoutErr(tmplFormat string, values any) string {
 var T = Tmpl
 
 // Alias of `strformat.TmplWithoutErr`
-var TE = TmplWithoutErr
+var TWE = TmplWithoutErr
