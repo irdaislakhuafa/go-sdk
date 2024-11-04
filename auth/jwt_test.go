@@ -44,13 +44,13 @@ func Test_JWT(t *testing.T) {
 
 	type test struct {
 		ctx        context.Context
-		name       string
 		beforeFunc func(ctx context.Context, j JWTInterface[*claims], p *params)
-		mode       Mode
-		params     params
 		want       want
-		isWantErr  bool
+		params     params
+		name       string
+		mode       Mode
 		wantErr    wantErr
+		isWantErr  bool
 	}
 
 	tests := []test{
