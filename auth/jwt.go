@@ -10,16 +10,23 @@ import (
 )
 
 type JWTInterface[C jwt.Claims] interface {
+	// A method generate JWT Token String and it will return error if there is error while generating JWT Token String
 	Generate(ctx context.Context) (string, error)
+
+	// For validate JWT Token String
 	Validate(ctx context.Context, tokenString string) (*jwt.Token, error)
+
+	// Extract a claims object from JWT Token String
 	ExtractClaims(ctx context.Context, jwtToken *jwt.Token) (C, error)
+
+	// Use this method if you want to modify signing method. Default signing method is `jwt.SigningMethodHS256`
 	WithSigningMethod(signingMethod jwt.SigningMethod) JWTInterface[C]
 }
 
 type jwtimpl[C jwt.Claims] struct {
-	secretKey     []byte
 	claims        C
 	signingMethod jwt.SigningMethod
+	secretKey     []byte
 }
 
 func InitJWT[C jwt.Claims](secretKey []byte, claims C) JWTInterface[C] {
