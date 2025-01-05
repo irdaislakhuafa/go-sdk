@@ -20,7 +20,7 @@ func TestCaches(t *testing.T) {
 		args struct {
 			key      string
 			ttl      uint64
-			callback func() string
+			callback func() (string, error)
 		}
 
 		params struct {
@@ -50,9 +50,9 @@ func TestCaches(t *testing.T) {
 				args: args{
 					key: "key_3s",
 					ttl: 3,
-					callback: func() string {
+					callback: func() (string, error) {
 						fmt.Println("callback called for key_3s") // should be called only once because cache will remember value for 3 seconds
-						return "value_3s"
+						return "value_3s", nil
 					},
 				},
 			},
@@ -70,9 +70,9 @@ func TestCaches(t *testing.T) {
 				args: args{
 					key: "key_3s",
 					ttl: 3,
-					callback: func() string {
+					callback: func() (string, error) {
 						fmt.Println("callback called for key_3s")
-						return "value_3s"
+						return "value_3s", nil
 					},
 				},
 			},
