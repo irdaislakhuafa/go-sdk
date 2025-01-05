@@ -11,7 +11,8 @@ type (
 	Interface[T any] interface {
 		// Remember value by key. If key is exists and ttl is not expired then return value without call callback.
 		// If key is not exists or ttl is expired then call callback and remember value by key.
-		Remember(key string, ttlS uint64, callback func() T) (T, error)
+		// Error is returned from callback if failed.
+		Remember(key string, ttlS uint64, callback func() (T, error)) (T, error)
 
 		// Clear all cache.
 		Clear()
@@ -41,7 +42,7 @@ func NewCache[T any]() Interface[T] {
 	}
 }
 
-func (c *cache[T]) Remember(key string, ttlS uint64, callback func() T) (T, error) {
+func (c *cache[T]) Remember(key string, ttlS uint64, callback func() (T, error)) (T, error) {
 	if i, isOk := c.Storage[key]; isOk {
 		if i.TTL > uint64(time.Now().Unix()) {
 			return i.Data, nil
@@ -50,7 +51,11 @@ func (c *cache[T]) Remember(key string, ttlS uint64, callback func() T) (T, erro
 			return c.Remember(key, ttlS, callback)
 		}
 	} else {
-		data := callback()
+		data, err := callback()
+		if err != nil {
+			return data, err
+		}
+
 		c.Storage[key] = item[T]{
 			TTL:  uint64(time.Now().Unix()) + ttlS,
 			Data: data,
