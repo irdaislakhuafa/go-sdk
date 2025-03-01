@@ -31,4 +31,6 @@ const (
 	// Cache control
 	CacheControlNoCache = "no-cache"
 	CacheControlNoStore = "no-store"
+
+	ContentEncodingUTF8 = "UTF-8"
 )

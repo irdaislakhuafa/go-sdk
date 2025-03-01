@@ -95,6 +95,7 @@ const (
 	CodeStorageNoFile
 	CodeStorageGenerateURLFailure
 	CodeStorageNoClient
+	CodeStorageDelFailure
 	CodeStorageEnd
 	// Other codes
 
