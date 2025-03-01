@@ -40,3 +40,6 @@ You can read full documentations [here](https://pkg.go.dev/github.com/irdaislakh
 ```bash
 go get github.com/irdaislakhuafa/go-sdk@latest
 ```
+
+## TODO
+- [ ] Implement storage file operation for type disk

@@ -4,6 +4,16 @@ import (
 	"context"
 	"io"
 	"time"
+
+	"github.com/irdaislakhuafa/go-sdk/codes"
+	"github.com/irdaislakhuafa/go-sdk/errors"
+)
+
+type StorageType string
+
+const (
+	TypeMinio = StorageType("minio")
+	TypeDisk  = StorageType("disk")
 )
 
 type (
@@ -13,6 +23,7 @@ type (
 		Url(ctx context.Context, params UrlParams) (UrlResult, error)
 	}
 	Config struct {
+		StorageType     StorageType
 		BaseDir         string
 		Host            string
 		Port            string
@@ -66,5 +77,17 @@ func (c *Config) parseDefault() {
 func (u *UrlParams) parseDefault() {
 	if u.ExpireDuration.Milliseconds() <= 0 {
 		u.ExpireDuration = time.Hour * 24
+	}
+}
+
+func Init(cfg Config) (Interface, error) {
+	switch cfg.StorageType {
+	case TypeMinio:
+		return InitMinio(cfg)
+	case TypeDisk:
+		// TODO: implement file operation on disk
+		fallthrough
+	default:
+		return nil, errors.NewWithCode(codes.CodeNotImplemented, "storage type '%s' not implemented", cfg.StorageType)
 	}
 }
