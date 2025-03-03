@@ -64,7 +64,6 @@ func InitMinio(cfg Config) (Interface, error) {
 }
 
 func (m *minioimpl) Put(ctx context.Context, params PutParams) (PutResult, error) {
-	fmt.Printf("dir: '%s'", params.DirName[len(params.DirName):])
 	if params.DirName[len(params.DirName):] == "" {
 		params.DirName = params.DirName + "/"
 	}
