@@ -26,6 +26,9 @@ type (
 
 		// Get cache value by key
 		Get(key string) (T, error)
+
+		// Get keys that stored on caches
+		Keys() []string
 	}
 
 	item[T any] struct {

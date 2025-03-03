@@ -80,3 +80,11 @@ func (m *memory[T]) Get(key string) (T, error) {
 
 	return value.Data, nil
 }
+
+func (m *memory[T]) Keys() []string {
+	keys := []string{}
+	for k := range m.Storage {
+		keys = append(keys, k)
+	}
+	return keys
+}
