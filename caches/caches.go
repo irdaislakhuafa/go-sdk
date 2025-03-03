@@ -1,8 +1,6 @@
 package caches
 
 import (
-	"time"
-
 	"github.com/irdaislakhuafa/go-sdk/codes"
 	"github.com/irdaislakhuafa/go-sdk/errors"
 )
@@ -20,63 +18,38 @@ type (
 		// Forget cache value by key.
 		Forget(key string) (T, error)
 
+		// Determine your own logic with function to forget cache by key
+		ForgetFn(func(key string) (T, error)) (T, error)
+
 		// Get length of cache.
 		Length() uint64
-	}
 
-	cache[T any] struct {
-		Dir     string
-		Storage map[string]item[T]
+		// Get cache value by key
+		Get(key string) (T, error)
 	}
 
 	item[T any] struct {
 		TTL  uint64
 		Data T
 	}
+
+	StorageType string
+
+	Config struct {
+		StorageType StorageType
+		Dir         string
+	}
 )
 
-func NewCache[T any]() Interface[T] {
-	return &cache[T]{
-		Dir:     "",
-		Storage: map[string]item[T]{},
+const (
+	StorageTypeMemory = StorageType("memory")
+)
+
+func Init[T any](cfg Config) (Interface[T], error) {
+	switch cfg.StorageType {
+	case StorageTypeMemory:
+		return InitMemory[T](cfg), nil
+	default:
+		return nil, errors.NewWithCode(codes.CodeNotImplemented, "storage type '%s' not implemented!", cfg.StorageType)
 	}
-}
-
-func (c *cache[T]) Remember(key string, ttlS uint64, callback func() (T, error)) (T, error) {
-	if i, isOk := c.Storage[key]; isOk {
-		if i.TTL > uint64(time.Now().Unix()) {
-			return i.Data, nil
-		} else {
-			delete(c.Storage, key)
-			return c.Remember(key, ttlS, callback)
-		}
-	} else {
-		data, err := callback()
-		if err != nil {
-			return data, err
-		}
-
-		c.Storage[key] = item[T]{
-			TTL:  uint64(time.Now().Unix()) + ttlS,
-			Data: data,
-		}
-		return data, nil
-	}
-}
-
-func (c *cache[T]) Clear() {
-	c.Storage = map[string]item[T]{}
-}
-
-func (c *cache[T]) Forget(key string) (T, error) {
-	if item, isOk := c.Storage[key]; isOk {
-		delete(c.Storage, key)
-		return item.Data, nil
-	} else {
-		return item.Data, errors.NewWithCode(codes.CodeNotFound, "key not found")
-	}
-}
-
-func (c *cache[T]) Length() uint64 {
-	return uint64(len(c.Storage))
 }
