@@ -15,8 +15,11 @@ const (
 )
 
 const (
+	// start code from sdk
+	CodeStart = Code(iota + 1)
+
 	// General result error codes
-	CodeSuccess = Code(iota + 1)
+	CodeSuccess
 	// Other codes
 
 	// Common error codes
@@ -171,6 +174,14 @@ const (
 	CodeQueueFull
 	// Other codes
 
+	// Cache codes
+	CodeCacheStart
+	CodeCacheKeyNotFound
+	CodeCacheEnd
+	// Other codes
+
+	// end of sdk code
+	CodeEnd
 )
 
 var codeMessages = map[Code](map[language.Language]Message){

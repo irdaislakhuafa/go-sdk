@@ -2,18 +2,21 @@ package caches
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/irdaislakhuafa/go-sdk/codes"
 	"github.com/irdaislakhuafa/go-sdk/errors"
 )
 
-func TestCaches(t *testing.T) {
+func TestMemoryCache(t *testing.T) {
 	type FN int
 	const (
 		FN_REMEMBER = iota
 		FN_CLEAR
 		FN_FORGET
+		FN_FORGETFN
+		FN_GET
 	)
 
 	type (
@@ -46,7 +49,7 @@ func TestCaches(t *testing.T) {
 		{
 			name: "remember 3 seconds success",
 			params: params{
-				cache: NewCache[string](),
+				cache: InitMemory[string](Config{StorageType: StorageTypeMemory}),
 				args: args{
 					key: "key_3s",
 					ttl: 3,
@@ -66,7 +69,7 @@ func TestCaches(t *testing.T) {
 		{
 			name: "forgot key_3s success",
 			params: params{
-				cache: NewCache[string](),
+				cache: InitMemory[string](Config{StorageType: StorageTypeMemory}),
 				args: args{
 					key: "key_3s",
 					ttl: 3,
@@ -86,7 +89,52 @@ func TestCaches(t *testing.T) {
 			},
 			fnAfter: func(test *test) {},
 		},
-	}
+		{
+			name: "forgot key_3s_fn with custom fn success",
+			params: params{
+				cache: InitMemory[string](Config{StorageType: StorageTypeMemory}),
+				args: args{
+					key: "key_3s_fn",
+					ttl: 3,
+					callback: func() (string, error) {
+						fmt.Println("callback called for key_3s_fn")
+						return "value_3s_fn", nil
+					},
+				},
+			},
+			fn: FN_FORGETFN,
+			want: want{
+				equals: "value_3s_fn",
+			},
+			fnBefore: func(test *test) {
+				tt := test
+				tt.params.cache.Remember(tt.params.args.key, tt.params.args.ttl, tt.params.args.callback)
+			},
+			fnAfter: func(test *test) {},
+		},
+		{
+			name: "get cache key_3s",
+			params: params{
+				cache: InitMemory[string](Config{StorageType: StorageTypeMemory}),
+				args: args{
+					key: "key_3s",
+					ttl: 3,
+					callback: func() (string, error) {
+						fmt.Println("callback called for key_3s")
+						return "value_3s", nil
+					},
+				},
+			},
+			fn: FN_GET,
+			want: want{
+				equals: "value_3s",
+			},
+			fnBefore: func(test *test) {
+				tt := test
+				tt.params.cache.Remember(tt.params.args.key, tt.params.args.ttl, tt.params.args.callback)
+			},
+			fnAfter: func(test *test) {},
+		}}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -126,8 +174,37 @@ func TestCaches(t *testing.T) {
 				}
 
 				_, err = tt.params.cache.Forget(tt.params.args.key)
-				if code := errors.GetCode(err); code != codes.CodeNotFound {
-					t.Fatalf("want '%v' but got '%v'", codes.CodeNotFound, code)
+				if code := errors.GetCode(err); code.IsNotOneOf(codes.CodeCacheKeyNotFound) {
+					t.Fatalf("want is not '%v' but got '%v'", codes.CodeNotFound, code)
+				}
+
+			case FN_FORGETFN:
+				value, err := tt.params.cache.ForgetFn(func(key string) (string, error) {
+					if strings.Contains(key, tt.params.args.key) {
+						return tt.params.cache.Forget(key)
+					}
+					return tt.params.cache.Get(key)
+				})
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				if value != tt.want.equals {
+					t.Fatalf("want '%v' but got '%v'", tt.want.equals, value)
+				}
+
+				_, err = tt.params.cache.Forget(tt.params.args.key)
+				if code := errors.GetCode(err); code.IsNotOneOf(codes.CodeCacheKeyNotFound) {
+					t.Fatalf("want is not '%v' but got '%v'", codes.CodeCacheKeyNotFound, code)
+				}
+			case FN_GET:
+				value, err := tt.params.cache.Get(tt.params.args.key)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				if value != tt.want.equals {
+					t.Fatalf("want '%v' but got '%v'", tt.want.equals, value)
 				}
 			}
 
