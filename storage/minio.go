@@ -20,6 +20,7 @@ type (
 	}
 )
 
+// Initialize minio object storage.
 func InitMinio(cfg Config) (Interface, error) {
 	cfg.parseDefault()
 
@@ -86,6 +87,7 @@ func (m *minioimpl) Put(ctx context.Context, params PutParams) (PutResult, error
 	}
 	return result, nil
 }
+
 func (m *minioimpl) Del(ctx context.Context, params DelParams) error {
 	err := m.client.RemoveObject(ctx, m.cfg.BaseDir, params.FullPath, minio.RemoveObjectOptions{
 		ForceDelete: params.Force,

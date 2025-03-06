@@ -18,10 +18,28 @@ const (
 
 type (
 	Interface interface {
+		// Put a file to storage.
+		//
+		// Errors:
+		//
+		// - `codes.CodeStorageNoFile`: if failed to put file to storage.
 		Put(ctx context.Context, params PutParams) (PutResult, error)
+
+		// Delete data from storage.
+		//
+		// Errors:
+		//
+		// - `codes.CodeStorageDelFailure`: if cannot delete file.
 		Del(ctx context.Context, params DelParams) error
+
+		// Generate url based on given full path of file.
+		//
+		// Errors:
+		//
+		// - `codes.CodeStorageGenerateURLFailure`: if failed on generate url.
 		Url(ctx context.Context, params UrlParams) (UrlResult, error)
 	}
+
 	Config struct {
 		StorageType     StorageType
 		BaseDir         string
@@ -80,6 +98,17 @@ func (u *UrlParams) parseDefault() {
 	}
 }
 
+// Initialize storage client.
+//
+// Current supported storage types:
+//
+// - minio: supported.
+//
+// - disk: not implemented yet.
+//
+// Will return error below if fail:
+//
+// - `codes.CodeStorageNoClient`: cannot connect to client
 func Init(cfg Config) (Interface, error) {
 	switch cfg.StorageType {
 	case TypeMinio:
