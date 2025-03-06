@@ -1,8 +1,6 @@
 package codes
 
 import (
-	"math"
-
 	"github.com/irdaislakhuafa/go-sdk/language"
 )
 
@@ -11,7 +9,7 @@ type Code uint64
 
 // Default code/no code
 const (
-	NoCode = math.MaxUint64
+	NoCode = Code(0)
 )
 
 const (
