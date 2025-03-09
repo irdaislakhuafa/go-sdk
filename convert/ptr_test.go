@@ -1,6 +1,7 @@
 package convert
 
 import (
+	"database/sql"
 	"reflect"
 	"testing"
 )
@@ -120,6 +121,151 @@ func Test_ToSafeValue(t *testing.T) {
 
 			if result != tt.want.value {
 				t.Fatalf("want result is '%v' but got '%v'", tt.want.value, result)
+			}
+		})
+	}
+}
+
+func Test_SQLNullToNil(t *testing.T) {
+	type (
+		args struct {
+			typeData reflect.Kind
+			snull    sql.NullString
+			inull    sql.NullInt16
+			bnull    sql.NullBool
+			fnull    sql.NullFloat64
+		}
+		want struct {
+			valid  bool
+			result any
+		}
+		test struct {
+			name string
+			args args
+			want want
+		}
+	)
+
+	tests := []test{
+		{
+			name: "success test int",
+			args: args{
+				typeData: reflect.Int,
+				inull: sql.NullInt16{
+					Int16: 100,
+					Valid: true,
+				},
+			},
+			want: want{
+				valid:  true,
+				result: 100,
+			},
+		},
+		{
+			name: "failed test int",
+			args: args{
+				typeData: reflect.Int,
+				inull: sql.NullInt16{
+					Int16: 100,
+					Valid: false,
+				},
+			},
+			want: want{
+				valid:  false,
+				result: nil,
+			},
+		},
+		{
+			name: "success test bool",
+			args: args{
+				typeData: reflect.Bool,
+				bnull: sql.NullBool{
+					Bool:  true,
+					Valid: true,
+				},
+			},
+			want: want{
+				valid:  true,
+				result: true,
+			},
+		},
+		{
+			name: "success test float64",
+			args: args{
+				typeData: reflect.Float64,
+				fnull: sql.NullFloat64{
+					Float64: 100.00,
+					Valid:   true,
+				},
+			},
+			want: want{
+				valid:  true,
+				result: 100.00,
+			},
+		},
+		{
+			name: "success test string",
+			args: args{
+				typeData: reflect.String,
+				snull: sql.NullString{
+					String: "100",
+					Valid:  true,
+				},
+			},
+			want: want{
+				valid:  true,
+				result: "100",
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			switch tt.args.typeData {
+			case reflect.Int:
+				res := SQLNullInt16ToNil(tt.args.inull)
+				if tt.want.valid {
+					if int(*res) != tt.want.result {
+						t.Fatalf("want is '%v' but got '%v'", tt.want.result, *res)
+					}
+				} else {
+					if res != nil {
+						t.Fatalf("want is '%v' but got '%v'", tt.want.result, res)
+					}
+				}
+			case reflect.Float64:
+				res := SQLNullFloat64ToNil(tt.args.fnull)
+				if tt.want.valid {
+					if *res != tt.want.result {
+						t.Fatalf("want is '%v' but got '%v'", tt.want.result, *res)
+					}
+				} else {
+					if res != nil {
+						t.Fatalf("want is '%v' but got '%v'", tt.want.result, res)
+					}
+				}
+			case reflect.Bool:
+				res := SQLNullBoolToNil(tt.args.bnull)
+				if tt.want.valid {
+					if *res != tt.want.result {
+						t.Fatalf("want is '%v' but got '%v'", tt.want.result, *res)
+					}
+				} else {
+					if res != nil {
+						t.Fatalf("want is '%v' but got '%v'", tt.want.result, res)
+					}
+				}
+			case reflect.String:
+				res := SQLNullStringToNil(tt.args.snull)
+				if tt.want.valid {
+					if *res != tt.want.result {
+						t.Fatalf("want is '%v' but got '%v'", tt.want.result, *res)
+					}
+				} else {
+					if res != nil {
+						t.Fatalf("want is '%v' but got '%v'", tt.want.result, res)
+					}
+				}
 			}
 		})
 	}
