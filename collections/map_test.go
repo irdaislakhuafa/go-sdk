@@ -44,7 +44,7 @@ func Test_Map(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			switch tt.mode {
 			case MODE_MAP:
-				res := Map(tt.args.values, func(value int) string {
+				res := Map(tt.args.values, func(_, value int) string {
 					return fmt.Sprint(value)
 				})
 
@@ -52,7 +52,7 @@ func Test_Map(t *testing.T) {
 					t.Fatalf("want is %+v but got %+v", tt.want.values, res)
 				}
 			case MODE_MAP_WITH_ERR:
-				res, err := MapWithErr(tt.args.values, func(value int) (string, error) {
+				res, err := MapWithErr(tt.args.values, func(_, value int) (string, error) {
 					return fmt.Sprint(value), nil
 				})
 				if err != nil {
