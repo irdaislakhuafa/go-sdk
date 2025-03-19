@@ -4,9 +4,9 @@ func Reduce[T any, R any](
 	values []T,
 	initial R,
 	fn func(
-		carry R,
-		index int,
-		value T,
+		c R,
+		i int,
+		v T,
 	) R,
 ) R {
 	for i, v := range values {
@@ -19,9 +19,9 @@ func ReduceWithErr[T any, R any](
 	values []T,
 	initial R,
 	fn func(
-		carry R,
-		index int,
-		value T,
+		c R,
+		i int,
+		v T,
 	) (R, error),
 ) (R, error) {
 	var err error
