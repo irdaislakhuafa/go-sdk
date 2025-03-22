@@ -13,8 +13,8 @@ type (
 	}
 
 	WrappedOpts struct {
-		showQuery bool
-		showArgs  bool
+		ShowQuery bool
+		ShowArgs  bool
 	}
 )
 
@@ -30,11 +30,11 @@ func (w *wrappedDBTX) ExecContext(ctx context.Context, query string, args ...any
 		query, args = b.Build(query, args...)
 	}
 
-	if w.opts.showQuery {
+	if w.opts.ShowQuery {
 		fmt.Printf("query: %v\n", query)
 	}
 
-	if w.opts.showArgs {
+	if w.opts.ShowArgs {
 		fmt.Printf("args: %v\n", args)
 	}
 
@@ -42,7 +42,7 @@ func (w *wrappedDBTX) ExecContext(ctx context.Context, query string, args ...any
 }
 
 func (w *wrappedDBTX) PrepareContext(ctx context.Context, query string) (*sql.Stmt, error) {
-	if w.opts.showQuery {
+	if w.opts.ShowQuery {
 		fmt.Printf("query: %v\n", query)
 	}
 
@@ -54,11 +54,11 @@ func (w *wrappedDBTX) QueryContext(ctx context.Context, query string, args ...an
 		query, args = b.Build(query, args...)
 	}
 
-	if w.opts.showQuery {
+	if w.opts.ShowQuery {
 		fmt.Printf("query: %v\n", query)
 	}
 
-	if w.opts.showArgs {
+	if w.opts.ShowArgs {
 		fmt.Printf("args: %v\n", args)
 	}
 
@@ -70,11 +70,11 @@ func (w *wrappedDBTX) QueryRowContext(ctx context.Context, query string, args ..
 		query, args = b.Build(query, args...)
 	}
 
-	if w.opts.showQuery {
+	if w.opts.ShowQuery {
 		fmt.Printf("query: %v\n", query)
 	}
 
-	if w.opts.showArgs {
+	if w.opts.ShowArgs {
 		fmt.Printf("args: %v\n", args)
 	}
 
