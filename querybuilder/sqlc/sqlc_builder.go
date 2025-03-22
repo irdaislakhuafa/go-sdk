@@ -82,8 +82,11 @@ func (b *Builder) In(column string, args ...any) BuilderInterface {
 // Order("id DESC")
 //
 // Order("id, age DESC")
-func (b *Builder) Order(cols string) BuilderInterface {
-	b.order = cols
+func (b *Builder) Order(cols string, args ...any) BuilderInterface {
+	b.order = order{
+		expression: cols,
+		args:       args,
+	}
 	return b
 }
 
@@ -140,10 +143,11 @@ func (b *Builder) Build(query string, args ...any) (string, []any) {
 		args = append(args, f.args...)
 	}
 
-	if b.order != "" {
+	if b.order.expression != "" {
 		sb.WriteString("ORDER BY ")
-		sb.WriteString(b.order)
+		sb.WriteString(b.order.expression)
 		sb.WriteByte('\n')
+		args = append(args, b.order.args...)
 	}
 
 	if b.limit != nil {
