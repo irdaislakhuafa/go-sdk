@@ -158,6 +158,5 @@ func (b *Builder) Build(query string, args ...any) (string, []any) {
 		sb.WriteByte('\n')
 	}
 
-	fmt.Printf("sb.String(): %v\n", sb.String())
 	return sb.String(), args
 }
