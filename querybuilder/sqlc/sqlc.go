@@ -22,7 +22,7 @@ type (
 		In(column string, args ...any) BuilderInterface
 		Or(column string, args ...any) BuilderInterface
 		And(column string, args ...any) BuilderInterface
-		Order(cols string) BuilderInterface
+		Order(cols string, args ...any) BuilderInterface
 		Limit(limit int) BuilderInterface
 		Offset(offset int) BuilderInterface
 		Build(query string, args ...any) (string, []any)
@@ -30,8 +30,13 @@ type (
 
 	Builder struct {
 		filters       []filter
-		order         string
+		order         order
 		offset, limit *int
+	}
+
+	order struct {
+		expression string
+		args       []any
 	}
 
 	filter struct {
