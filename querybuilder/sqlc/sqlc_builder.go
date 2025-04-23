@@ -127,11 +127,6 @@ func (b *Builder) Build(query string, args ...any) (string, []any) {
 		}
 
 		if f.hasLogic {
-			if i == 0 && isContainWhere {
-				sb.WriteString("OR 1 = 1\n")
-			} else if i == 0 && !isContainWhere {
-				sb.WriteString("1 = 1\n")
-			}
 			sb.WriteString(f.expression)
 			sb.WriteByte('\n')
 		} else {
