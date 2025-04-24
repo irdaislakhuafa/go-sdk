@@ -3,7 +3,9 @@ package sqlc
 import (
 	"context"
 	"database/sql"
+	"strings"
 
+	"github.com/irdaislakhuafa/go-sdk/collections"
 	"github.com/irdaislakhuafa/go-sdk/convert"
 )
 
@@ -65,4 +67,11 @@ func GetBuilder(ctx context.Context) (*Builder, bool) {
 
 func WithBuilder(ctx context.Context, b *Builder) context.Context {
 	return context.WithValue(ctx, ctxKey{}, b)
+}
+
+func GenQueryArgs[T any](ctx context.Context, params ...T) (exprs string, args any) {
+	exprs = strings.Repeat("?,", len(params))
+	exprs = exprs[:len(exprs)-1]
+	args = collections.Map(params, func(i int, v T) any { return v })
+	return exprs, args
 }
