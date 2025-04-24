@@ -69,7 +69,7 @@ func WithBuilder(ctx context.Context, b *Builder) context.Context {
 	return context.WithValue(ctx, ctxKey{}, b)
 }
 
-func GenQueryArgs[T any](ctx context.Context, params ...T) (exprs string, args any) {
+func GenQueryArgs[T any](ctx context.Context, params ...T) (exprs string, args []any) {
 	exprs = strings.Repeat("?,", len(params))
 	exprs = exprs[:len(exprs)-1]
 	args = collections.Map(params, func(i int, v T) any { return v })
