@@ -28,7 +28,9 @@ type (
 // Driver is type of database driver. Current supported driver are:
 //
 // - `DriverMySQL`
+//
 // - `DriverPostgresQL`
+//
 // - `DriverSQLite`
 //
 // This type is string, so you can use string literal to represent driver
