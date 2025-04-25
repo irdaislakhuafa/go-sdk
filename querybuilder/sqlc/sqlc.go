@@ -48,6 +48,7 @@ type (
 	}
 )
 
+// Build create new builder or clone builder from context
 func Build(ctx context.Context, fn func(b *Builder)) context.Context {
 	b, isOk := GetBuilder(ctx)
 	if !isOk {
