@@ -49,7 +49,7 @@ func Test_Concurrency(t *testing.T) {
 					time.Sleep(time.Second * 3)
 					c.Lock()
 					intValues = append(intValues, i)
-					t.Logf(strings.ReplaceAll(fmt.Sprintf("%#v", intValues), "[]int", ""))
+					t.Log(strings.ReplaceAll(fmt.Sprintf("%#v", intValues), "[]int", ""))
 					c.Unlock()
 				})
 			}
@@ -65,7 +65,7 @@ func Test_Concurrency(t *testing.T) {
 					time.Sleep(time.Second * 3)
 					c.Lock()
 					intValues = append(intValues, i)
-					t.Logf(strings.ReplaceAll(fmt.Sprintf("%#v", intValues), "[]int", ""))
+					t.Log(strings.ReplaceAll(fmt.Sprintf("%#v", intValues), "[]int", ""))
 					c.Unlock()
 				})
 			}
@@ -77,7 +77,7 @@ func Test_Concurrency(t *testing.T) {
 			}
 
 			if !collections.IsElementsEquals(tt.want.intValues, intValues) {
-				t.Fatalf(strings.ReplaceAll(fmt.Sprintf("want result values is '%#v' but got '%#v'", tt.want.intValues, intValues), "[]int", ""))
+				t.Fatal(strings.ReplaceAll(fmt.Sprintf("want result values is '%#v' but got '%#v'", tt.want.intValues, intValues), "[]int", ""))
 			}
 		})
 	}
