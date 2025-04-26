@@ -1,13 +1,3 @@
-# Overview
-
-[SQLC](https://github.com/sqlc-dev/sqlc) is a great tool to use raw sql query with golang. But currently `sqlc` lacks of dynamic query support.
-
-It's currently only support static query that compiled to golang code, but sometimes we need dynamic query for condition/order/limit/etc. So i write this code as wrapper for sqlc for dynamic query.
-
-## Usage
-Below is usage example for this library to write dynamic query filters. See full example [here](./example/)
-
-```go
 package main
 
 import (
@@ -132,4 +122,3 @@ func main() {
 
 	fmt.Printf("users: %+v\n", users) // expected: [{ID:4 Name:John doe 4 Email:jhondoe[4]@gmail.com Age:24}]
 }
-``` 
