@@ -175,6 +175,9 @@ const (
 	// Cache codes
 	CodeCacheStart
 	CodeCacheKeyNotFound
+	CodeCacheAddErr
+	CodeCacheDelErr
+	CodeCacheReadErr
 	CodeCacheEnd
 	// Other codes
 
