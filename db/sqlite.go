@@ -13,7 +13,7 @@ func sqlite(cfg Config) (*sql.DB, error) {
 	if cfg.Options.InMemory {
 		dsn = ":memory:"
 	} else {
-		dsn = "./" + cfg.Name + ".db"
+		dsn = cfg.Name + ".db"
 	}
 
 	db, err := sql.Open(string(DriverSQLite), dsn)

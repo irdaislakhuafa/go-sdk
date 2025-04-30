@@ -46,12 +46,15 @@ type (
 
 const (
 	StorageTypeMemory = StorageType("memory")
+	StorageTypeSQLite = StorageType("sqlite")
 )
 
 func Init[T any](cfg Config) (Interface[T], error) {
 	switch cfg.StorageType {
 	case StorageTypeMemory:
 		return InitMemory[T](cfg), nil
+	case StorageTypeSQLite:
+		return InitSQLite[T](cfg), nil
 	default:
 		return nil, errors.NewWithCode(codes.CodeNotImplemented, "storage type '%s' not implemented!", cfg.StorageType)
 	}
