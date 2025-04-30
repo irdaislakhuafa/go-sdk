@@ -153,8 +153,6 @@ func TestSQLiteCache(t *testing.T) {
 					t.Fatalf("want '%v' but got '%v'", tt.want.equals, value)
 				}
 
-				t.Logf("tt.params.cache.Keys(): %v\n", tt.params.cache.Keys())
-
 				value, err = tt.params.cache.Remember(tt.params.args.key, tt.params.args.ttl, tt.params.args.callback)
 				if err != nil {
 					t.Fatal(err)
