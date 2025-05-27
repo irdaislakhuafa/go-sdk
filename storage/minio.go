@@ -100,6 +100,22 @@ func (m *minioimpl) Del(ctx context.Context, params DelParams) error {
 }
 
 func (m *minioimpl) Url(ctx context.Context, params UrlParams) (UrlResult, error) {
+	if strings.HasPrefix(params.FullPath, "http") {
+		url, err := url.Parse(params.FullPath)
+		if err != nil {
+			return UrlResult{}, errors.NewWithCode(codes.CodeBadRequest, "%s", err.Error())
+		}
+
+		result := UrlResult{
+			Scheme:   url.Scheme,
+			Host:     url.Host,
+			FullPath: url.Path,
+			FullURL:  params.FullPath,
+			RawQuery: url.RawQuery,
+		}
+		return result, nil
+	}
+
 	params.parseDefault()
 	clientRes, err := m.client.PresignedGetObject(ctx, m.cfg.BaseDir, params.FullPath, params.ExpireDuration, url.Values{})
 	if err != nil {
