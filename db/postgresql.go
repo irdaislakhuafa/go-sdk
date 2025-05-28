@@ -10,7 +10,7 @@ import (
 )
 
 func postgresql(cfg Config) (*sql.DB, error) {
-	dsn, err := strformat.T("host={{ .Host }} port={{ .Port }} user={{ .User }} password={{ .Password }} dbname={{ .Name }} sslmode={{ .SSLMode }}", cfg)
+	dsn, err := strformat.T("host={{ .Host }} port={{ .Port }} user={{ .User }} password={{ .Password }} dbname={{ .Name }} sslmode={{ .Options.SSLMode }}", cfg)
 	if err != nil {
 		return nil, errors.NewWithCode(errors.GetCode(err), "%s", err.Error())
 	}
