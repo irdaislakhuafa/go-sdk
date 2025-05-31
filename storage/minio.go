@@ -100,6 +100,14 @@ func (m *minioimpl) Del(ctx context.Context, params DelParams) error {
 }
 
 func (m *minioimpl) Url(ctx context.Context, params UrlParams) (UrlResult, error) {
+	if params.FullPath == "" {
+		res := UrlResult{
+			FullPath: params.FullPath,
+			FullURL:  params.FullPath,
+		}
+		return res, nil
+	}
+
 	if strings.HasPrefix(params.FullPath, "http") {
 		url, err := url.Parse(params.FullPath)
 		if err != nil {
