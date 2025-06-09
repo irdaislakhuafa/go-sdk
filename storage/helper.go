@@ -8,6 +8,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/irdaislakhuafa/go-sdk/codes"
 	"github.com/irdaislakhuafa/go-sdk/errors"
+	"github.com/irdaislakhuafa/go-sdk/files"
 	"github.com/irdaislakhuafa/go-sdk/header"
 )
 
@@ -34,7 +35,7 @@ func NewPutParamsFromMultipart(dir string, params multipart.FileHeader) (PutPara
 
 	result := PutParams{
 		DirName:      dir,
-		FileName:     uuid.NewString(),
+		FileName:     uuid.NewString() + "." + files.GetFileExtenstion(params.Filename),
 		FileBuffer:   buff,
 		FileSize:     int64(buff.Len()),
 		ContentType:  params.Header.Get(header.KeyContentType),
