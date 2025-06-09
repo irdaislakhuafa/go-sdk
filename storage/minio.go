@@ -130,7 +130,7 @@ func (m *minioimpl) Url(ctx context.Context, params UrlParams) (UrlResult, error
 		return UrlResult{}, errors.NewWithCode(codes.CodeStorageGenerateURLFailure, "%s", err.Error())
 	}
 
-	clientRes.RawQuery = url.QueryEscape(clientRes.RawQuery)
+	// clientRes.RawQuery = url.QueryEscape(clientRes.RawQuery)
 
 	url, err := strformat.T("{{ .Scheme }}://{{ .Host }}{{ .Path }}?{{ .RawQuery }}", clientRes)
 	if err != nil {
