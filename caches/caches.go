@@ -19,7 +19,7 @@ type (
 		Forget(key string) (T, error)
 
 		// Determine your own logic with function to forget cache by key
-		ForgetFn(func(key string) (T, error)) (T, error)
+		ForgetFn(func(key string) (res T, err error)) (T, error)
 
 		// Get length of cache.
 		Length() uint64
