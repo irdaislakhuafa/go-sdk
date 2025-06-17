@@ -27,6 +27,7 @@ type (
 		Order(cols string, args ...any) BuilderInterface
 		Limit(limit int) BuilderInterface
 		Offset(offset int) BuilderInterface
+		GroupBy(cols string, args ...any) BuilderInterface
 		Build(query string, args ...any) (string, []any)
 	}
 
@@ -34,6 +35,7 @@ type (
 		filters       []filter
 		order         order
 		offset, limit *int
+		groupBy       *groupBy
 	}
 
 	order struct {
@@ -45,6 +47,11 @@ type (
 		expression string
 		hasLogic   bool
 		args       []any
+	}
+
+	groupBy struct {
+		cols string
+		args []any
 	}
 )
 

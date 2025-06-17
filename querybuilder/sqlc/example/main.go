@@ -82,6 +82,8 @@ func main() {
 		OrderType: "desc",
 	}
 	users, err := queries.ListUser(sqlc.Build(ctx, func(b *sqlc.Builder) {
+		b.GroupBy("id")
+
 		// if params.IDs is not empty then filter by params.IDs
 		if len(params.IDs) > 0 {
 			_, args := sqlc.GenQueryArgs(ctx, params.IDs...)
