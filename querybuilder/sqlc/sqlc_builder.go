@@ -110,6 +110,19 @@ func (b *Builder) Offset(offset int) BuilderInterface {
 	return b
 }
 
+// Group columns on SELECT query. Your query will like "SELECT x FROM x WHERE x GROUP BY {{ cols }}"
+//
+// Example:
+//
+// Group("id")
+func (b *Builder) GroupBy(cols string, args ...any) BuilderInterface {
+	b.groupBy = &groupBy{
+		cols: cols,
+		args: args,
+	}
+	return b
+}
+
 // Build or compile your queries
 func (b *Builder) Build(query string, args ...any) (string, []any) {
 	sb := strings.Builder{}
@@ -141,6 +154,13 @@ func (b *Builder) Build(query string, args ...any) (string, []any) {
 		}
 
 		args = append(args, f.args...)
+	}
+
+	if b.groupBy != nil {
+		sb.WriteString("GROUP BY ")
+		sb.WriteString(b.groupBy.cols)
+		sb.WriteByte('\n')
+		args = append(args, b.groupBy.args...)
 	}
 
 	if b.order.expression != "" {
