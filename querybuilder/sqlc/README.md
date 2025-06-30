@@ -1,8 +1,10 @@
 # Overview
 
-[SQLC](https://github.com/sqlc-dev/sqlc) is a great tool to use raw sql query with golang. But currently `sqlc` lacks of dynamic query support.
+[SQLC](https://github.com/sqlc-dev/sqlc) is a powerful tool that compiles raw SQL queries into type-safe Go code. However, it currently only supports **static queries**, which are defined ahead of time and compiled directly into Go.
 
-It's currently only support static query that compiled to golang code, but sometimes we need dynamic query for condition/order/limit/etc. So i write this code as wrapper for sqlc for dynamic query.
+In many real-world scenarios, we need **dynamic query building** — such as flexible filtering, conditional WHERE clauses, ordering, pagination, and more — which sqlc doesn’t natively support.
+
+This library serves as a lightweight wrapper around sqlc to enable **dynamic query construction** while still benefiting from sqlc’s type safety and performance. It helps you write cleaner, safer, and more maintainable dynamic SQL in Go.
 
 ## Usage
 Below is usage example for this library to write dynamic query filters. See full example [here](./example/)
