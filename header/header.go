@@ -15,6 +15,7 @@ const (
 	ContentTypeXML  = "application/xml"
 	ContentTypeForm = "application/x-www-form-urlencoded"
 	ContentTypeHTML = "text/html"
+	ContentTypePDF  = "application/pdf"
 
 	// Accepting media. Specifying the types of requested media (in the response)
 	// See here: https://en.wikipedia.org/wiki/Content_negotiation
