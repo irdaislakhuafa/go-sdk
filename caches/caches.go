@@ -10,7 +10,7 @@ type (
 		// Remember value by key. If key is exists and ttl is not expired then return value without call callback.
 		// If key is not exists or ttl is expired then call callback and remember value by key.
 		// Error is returned from callback if failed.
-		Remember(key string, ttlS uint64, callback func() (T, error)) (T, error)
+		Remember(key string, ttlS uint64, callback func() (c T, err error)) (T, error)
 
 		// Clear all cache.
 		Clear()
