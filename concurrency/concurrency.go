@@ -41,10 +41,15 @@ type Interface interface {
 	GetMaxWorker() int64
 
 	// Create clone object of this concurrency with empty list function or etc but with same max worker
-	Clone() Interface
+	Clone(opts CloneOptions) Interface
 
 	// Get list errors
 	GetErrors() []error
+}
+
+type CloneOptions struct {
+	LockSharing      bool
+	MaxWorkerSharing bool
 }
 
 type concurrency struct {
@@ -134,8 +139,18 @@ func (c *concurrency) GetMaxWorker() int64 {
 	return c.maxWorker
 }
 
-func (c *concurrency) Clone() Interface {
-	return NewConcurrency().WithMaxWorker(c.maxWorker)
+func (c *concurrency) Clone(opts CloneOptions) Interface {
+	result := NewConcurrency()
+
+	if opts.MaxWorkerSharing {
+		result = result.WithMaxWorker(c.maxWorker)
+	}
+
+	if opts.LockSharing {
+		result = result.WithLocker(c.lc)
+	}
+
+	return result
 }
 
 func (c *concurrency) GetErrors() []error {
