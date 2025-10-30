@@ -13,6 +13,7 @@
     # pkgs.nodejs_20
     # pkgs.nodePackages.nodemon
     pkgs.goimports-reviser
+    pkgs.gh
   ];
 
   # Sets environment variables in the workspace
@@ -22,6 +23,8 @@
     extensions = [
       # "vscodevim.vim"
       "golang.go"
+      "bernabe.gemcommit"
+      "Joundy.lumpat"
     ];
 
     # Enable previews
