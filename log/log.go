@@ -3,17 +3,10 @@ package log
 import (
 	"context"
 	"fmt"
-	"os"
-	"sync"
-	"time"
 
-	"github.com/irdaislakhuafa/go-sdk/appcontext"
 	"github.com/irdaislakhuafa/go-sdk/errors"
 	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 )
-
-var once sync.Once = sync.Once{}
 
 type Interface interface {
 	// TODO: added method Debugf
@@ -26,72 +19,31 @@ type Interface interface {
 	WithCtxFields(funcCtxField func(ctx context.Context) map[string]any) Interface
 }
 
-type Config struct {
-	Level string
-}
-
-type logger struct {
-	log           zerolog.Logger
-	funcCtxFields func(ctx context.Context) map[string]any
-}
+type (
+	Config struct {
+		Level          LEVEL
+		SkipFrameCount int
+		Storage        StorageOpt
+	}
+	logger struct {
+		log           zerolog.Logger
+		funcCtxFields func(ctx context.Context) map[string]any
+	}
+)
 
 const (
-	skipFrameCount = 3 // NOTE: temporary 3 for now
+	DEFAULT_SKIP_FRAME_COUNT = 3 // NOTE: temporary 3 for now
 )
 
 func Init(cfg Config) Interface {
-	var zerologger zerolog.Logger
-	once.Do(func() {
-		level, err := zerolog.ParseLevel(cfg.Level)
-		if err != nil {
-			log.Fatal().Msg(fmt.Sprintf("failed to parse log level from config with err: %v", err))
-		}
+	cfg.ParseDefault()
 
-		zerologger = zerolog.New(os.Stdout).
-			With().
-			Timestamp().
-			CallerWithSkipFrameCount(skipFrameCount).
-			Logger().
-			Level(level)
-	})
-
-	return &logger{log: zerologger}
-}
-
-func (l *logger) Trace(ctx context.Context, obj interface{}) {
-	l.log.Trace().
-		Fields(l.getContextFields(ctx)).
-		Msg(fmt.Sprint(GetCaller(obj)))
-}
-
-func (l *logger) Debug(ctx context.Context, obj interface{}) {
-	l.log.Debug().
-		Fields(l.getContextFields(ctx)).
-		Msg(fmt.Sprint(GetCaller(obj)))
-}
-
-func (l *logger) Info(ctx context.Context, obj interface{}) {
-	l.log.Info().
-		Fields(l.getContextFields(ctx)).
-		Msg(fmt.Sprint(GetCaller(obj)))
-}
-
-func (l *logger) Warn(ctx context.Context, obj interface{}) {
-	l.log.Warn().
-		Fields(l.getContextFields(ctx)).
-		Msg(fmt.Sprint(GetCaller(obj)))
-}
-
-func (l *logger) Error(ctx context.Context, obj interface{}) {
-	l.log.Error().
-		Fields(l.getContextFields(ctx)).
-		Msg(fmt.Sprint(GetCaller(obj)))
-}
-
-func (l *logger) Fatal(ctx context.Context, obj interface{}) {
-	l.log.Fatal().
-		Fields(l.getContextFields(ctx)).
-		Msg(fmt.Sprint(GetCaller(obj)))
+	switch cfg.Storage.Driver {
+	case STORAGE_DRIVER_CONSOLE:
+		return InitConsole(cfg)
+	default:
+		panic(fmt.Sprintf("log storage driver '%v' not implemented!", cfg.Storage.Driver))
+	}
 }
 
 func GetCaller(value any) any {
@@ -109,27 +61,12 @@ func GetCaller(value any) any {
 	}
 }
 
-func (l *logger) getContextFields(ctx context.Context) map[string]any {
-	reqStartTime := appcontext.GetRequestStartTime(ctx)
-	timeElapsed := "0ms"
-
-	if !reqStartTime.IsZero() {
-		timeElapsed = fmt.Sprintf("%dms", uint64(time.Since(reqStartTime)/time.Millisecond))
+func (cfg *Config) ParseDefault() {
+	if cfg.Storage.Driver == "" {
+		cfg.Storage.Driver = STORAGE_DRIVER_CONSOLE
 	}
 
-	if l.funcCtxFields != nil {
-		return l.funcCtxFields(ctx)
+	if cfg.SkipFrameCount <= 0 {
+		cfg.SkipFrameCount = DEFAULT_SKIP_FRAME_COUNT
 	}
-
-	return map[string]any{
-		"request_id":      appcontext.GetRequestID(ctx),
-		"user_agent":      appcontext.GetUserAgent(ctx),
-		"service_version": appcontext.GetServiceVersion(ctx),
-		"time_elapsed":    timeElapsed,
-	}
-}
-
-func (l *logger) WithCtxFields(funcCtxField func(ctx context.Context) map[string]any) Interface {
-	l.funcCtxFields = funcCtxField
-	return l
 }
