@@ -41,6 +41,8 @@ func Init(cfg Config) Interface {
 	switch cfg.Storage.Driver {
 	case STORAGE_DRIVER_CONSOLE:
 		return InitConsole(cfg)
+	case STORAGE_DRIVER_FILE:
+		return InitFile(cfg)
 	default:
 		panic(fmt.Sprintf("log storage driver '%v' not implemented!", cfg.Storage.Driver))
 	}
@@ -68,5 +70,9 @@ func (cfg *Config) ParseDefault() {
 
 	if cfg.SkipFrameCount <= 0 {
 		cfg.SkipFrameCount = DEFAULT_SKIP_FRAME_COUNT
+	}
+
+	if cfg.Storage.Driver == STORAGE_DRIVER_FILE {
+		cfg.Storage.FileLocation = "logs/log.json"
 	}
 }

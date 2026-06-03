@@ -5,7 +5,7 @@ import "context"
 type (
 	StorageOpt struct {
 		Driver   StorageDriver
-		Location string
+		FileLocation string
 		Rotation StorageRotation
 	}
 	StorageRotation struct {
