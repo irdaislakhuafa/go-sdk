@@ -3,20 +3,13 @@ package log
 import (
 	"context"
 	"fmt"
-	"os"
-	"sync"
-	"time"
 
-	"github.com/irdaislakhuafa/go-sdk/appcontext"
 	"github.com/irdaislakhuafa/go-sdk/errors"
 	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 )
 
-var once sync.Once = sync.Once{}
-
+// Interface defines the methods that a logger must implement.
 type Interface interface {
-	// TODO: added method Debugf
 	Trace(ctx context.Context, obj interface{})
 	Debug(ctx context.Context, obj interface{})
 	Info(ctx context.Context, obj interface{})
@@ -24,76 +17,45 @@ type Interface interface {
 	Error(ctx context.Context, obj interface{})
 	Fatal(ctx context.Context, obj interface{})
 	WithCtxFields(funcCtxField func(ctx context.Context) map[string]any) Interface
+	Cleanup(ctx context.Context)
 }
 
+// Config holds the configuration for the logger.
 type Config struct {
-	Level string
+	Level          LEVEL
+	SkipFrameCount int
+	Storage        StorageOpt
 }
 
+// logger is an internal struct that holds the zerolog logger and context fields function.
 type logger struct {
 	log           zerolog.Logger
 	funcCtxFields func(ctx context.Context) map[string]any
 }
 
 const (
-	skipFrameCount = 3 // NOTE: temporary 3 for now
+	DEFAULT_SKIP_FRAME_COUNT = 3 // NOTE: temporary 3 for now
 )
 
+// Init initializes a new logger based on the provided configuration.
+// It returns an Interface that logs to either console or file, depending on the config.
 func Init(cfg Config) Interface {
-	var zerologger zerolog.Logger
-	once.Do(func() {
-		level, err := zerolog.ParseLevel(cfg.Level)
-		if err != nil {
-			log.Fatal().Msg(fmt.Sprintf("failed to parse log level from config with err: %v", err))
-		}
+	cfg.ParseDefault()
 
-		zerologger = zerolog.New(os.Stdout).
-			With().
-			Timestamp().
-			CallerWithSkipFrameCount(skipFrameCount).
-			Logger().
-			Level(level)
-	})
-
-	return &logger{log: zerologger}
+	switch cfg.Storage.Driver {
+	case STORAGE_DRIVER_CONSOLE:
+		return InitConsole(cfg)
+	case STORAGE_DRIVER_FILE:
+		return InitFile(cfg)
+	default:
+		panic(fmt.Sprintf("log storage driver '%v' not implemented!", cfg.Storage.Driver))
+	}
 }
 
-func (l *logger) Trace(ctx context.Context, obj interface{}) {
-	l.log.Trace().
-		Fields(l.getContextFields(ctx)).
-		Msg(fmt.Sprint(GetCaller(obj)))
-}
-
-func (l *logger) Debug(ctx context.Context, obj interface{}) {
-	l.log.Debug().
-		Fields(l.getContextFields(ctx)).
-		Msg(fmt.Sprint(GetCaller(obj)))
-}
-
-func (l *logger) Info(ctx context.Context, obj interface{}) {
-	l.log.Info().
-		Fields(l.getContextFields(ctx)).
-		Msg(fmt.Sprint(GetCaller(obj)))
-}
-
-func (l *logger) Warn(ctx context.Context, obj interface{}) {
-	l.log.Warn().
-		Fields(l.getContextFields(ctx)).
-		Msg(fmt.Sprint(GetCaller(obj)))
-}
-
-func (l *logger) Error(ctx context.Context, obj interface{}) {
-	l.log.Error().
-		Fields(l.getContextFields(ctx)).
-		Msg(fmt.Sprint(GetCaller(obj)))
-}
-
-func (l *logger) Fatal(ctx context.Context, obj interface{}) {
-	l.log.Fatal().
-		Fields(l.getContextFields(ctx)).
-		Msg(fmt.Sprint(GetCaller(obj)))
-}
-
+// GetCaller extracts caller information from an error or returns the input as is.
+// If the value is an error, it returns a formatted string with file, line, and message.
+// If the value is a string, it returns the string as is.
+// Otherwise, it returns the value formatted as a Go syntax representation.
 func GetCaller(value any) any {
 	switch tErr := value.(type) {
 	case error:
@@ -109,27 +71,18 @@ func GetCaller(value any) any {
 	}
 }
 
-func (l *logger) getContextFields(ctx context.Context) map[string]any {
-	reqStartTime := appcontext.GetRequestStartTime(ctx)
-	timeElapsed := "0ms"
-
-	if !reqStartTime.IsZero() {
-		timeElapsed = fmt.Sprintf("%dms", uint64(time.Since(reqStartTime)/time.Millisecond))
+// ParseDefault sets default values for the logger configuration if not already set.
+// It sets the driver to CONSOLE if empty, skip frame count to default, and file location for file driver.
+func (cfg *Config) ParseDefault() {
+	if cfg.Storage.Driver == "" {
+		cfg.Storage.Driver = STORAGE_DRIVER_CONSOLE
 	}
 
-	if l.funcCtxFields != nil {
-		return l.funcCtxFields(ctx)
+	if cfg.SkipFrameCount <= 0 {
+		cfg.SkipFrameCount = DEFAULT_SKIP_FRAME_COUNT
 	}
 
-	return map[string]any{
-		"request_id":      appcontext.GetRequestID(ctx),
-		"user_agent":      appcontext.GetUserAgent(ctx),
-		"service_version": appcontext.GetServiceVersion(ctx),
-		"time_elapsed":    timeElapsed,
+	if cfg.Storage.Driver == STORAGE_DRIVER_FILE {
+		cfg.Storage.FileLocation = "logs/log.json"
 	}
-}
-
-func (l *logger) WithCtxFields(funcCtxField func(ctx context.Context) map[string]any) Interface {
-	l.funcCtxFields = funcCtxField
-	return l
 }
