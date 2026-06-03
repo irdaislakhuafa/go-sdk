@@ -118,3 +118,8 @@ func (c *consoleImpl) getContextFields(ctx context.Context) map[string]any {
 		"time_elapsed":    timeElapsed,
 	}
 }
+
+// Cleanup implements Interface.
+func (c *consoleImpl) Cleanup(ctx context.Context) {
+	// do nothing because it's show on console
+}

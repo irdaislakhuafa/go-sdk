@@ -17,6 +17,7 @@ type Interface interface {
 	Error(ctx context.Context, obj interface{})
 	Fatal(ctx context.Context, obj interface{})
 	WithCtxFields(funcCtxField func(ctx context.Context) map[string]any) Interface
+	Cleanup(ctx context.Context)
 }
 
 // Config holds the configuration for the logger.

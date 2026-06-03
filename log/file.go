@@ -3,6 +3,9 @@ package log
 import (
 	"context"
 	"fmt"
+	"io"
+	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/irdaislakhuafa/go-sdk/appcontext"
@@ -15,6 +18,7 @@ type (
 	fileImpl struct {
 		log           zerolog.Logger
 		funcCtxFields func(ctx context.Context) map[string]any
+		fileLog       io.Writer
 	}
 )
 
@@ -22,21 +26,39 @@ type (
 // It returns an Interface that logs to a file using lumberjack for rotation.
 func InitFile(cfg Config) Interface {
 	var zerologger zerolog.Logger
+	var fileLog io.Writer
 	once.Do(func() {
 		level, err := zerolog.ParseLevel(string(cfg.Level))
 		if err != nil {
 			zlog.Fatal().Msg(fmt.Sprintf("failed to parse log level from config with err: %v", err))
 		}
 
-		fileLog := lumberjack.Logger{
-			Filename:   cfg.Storage.FileLocation, // Log file path
-			MaxSize:    30,                       // Megabytes before rolling
-			MaxBackups: 3,                        // Maximum number of old log files to retain
-			MaxAge:     30,                       // Maximum number of days to retain old log files
-			Compress:   true,                     // Compress old log files (gzip)
+		if cfg.Storage.Rotation.Enable {
+			fileLog = &lumberjack.Logger{
+				Filename:   cfg.Storage.FileLocation, // Log file path
+				MaxSize:    30,                       // Megabytes before rolling
+				MaxBackups: 3,                        // Maximum number of old log files to retain
+				MaxAge:     30,                       // Maximum number of days to retain old log files
+				Compress:   true,                     // Compress old log files (gzip)
+			}
+		} else {
+			dir := filepath.Dir(cfg.Storage.FileLocation)
+			if err := os.MkdirAll(dir, 0777); err != nil {
+				zlog.Fatal().Msg(fmt.Sprintf("failed to make dir '%v', %v", dir, err))
+			}
+
+			file, err := os.OpenFile(cfg.Storage.FileLocation, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+			if err != nil {
+				zlog.Fatal().Msg(err.Error())
+				return
+			}
+			fileLog = file
+			cleanup = func(ctx context.Context) {
+				file.Close()
+			}
 		}
 
-		zerologger = zerolog.New(&fileLog).
+		zerologger = zerolog.New(fileLog).
 			With().
 			Timestamp().
 			CallerWithSkipFrameCount(cfg.SkipFrameCount).
@@ -44,11 +66,16 @@ func InitFile(cfg Config) Interface {
 			Level(level)
 	})
 
-	return &fileImpl{
+	result := &fileImpl{
 		log:           zerologger,
 		funcCtxFields: nil,
+		fileLog:       fileLog,
 	}
+
+	return result
 }
+
+var cleanup func(ctx context.Context) = func(ctx context.Context) {}
 
 // Debug logs a debug message to a file.
 // It takes a context and an object to log, and includes caller information.
@@ -124,4 +151,9 @@ func (f *fileImpl) getContextFields(ctx context.Context) map[string]any {
 		"service_version": appcontext.GetServiceVersion(ctx),
 		"time_elapsed":    timeElapsed,
 	}
+}
+
+// Cleanup implements Interface.
+func (f *fileImpl) Cleanup(ctx context.Context) {
+	cleanup(ctx)
 }
