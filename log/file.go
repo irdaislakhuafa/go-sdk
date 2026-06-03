@@ -13,11 +13,13 @@ import (
 
 type (
 	fileImpl struct {
-		log zerolog.Logger
+		log           zerolog.Logger
 		funcCtxFields func(ctx context.Context) map[string]any
 	}
 )
 
+// InitFile initializes a new file logger with the given configuration.
+// It returns an Interface that logs to a file using lumberjack for rotation.
 func InitFile(cfg Config) Interface {
 	var zerologger zerolog.Logger
 	once.Do(func() {
@@ -42,48 +44,54 @@ func InitFile(cfg Config) Interface {
 			Level(level)
 	})
 
-	return &consoleImpl{
+	return &fileImpl{
 		log:           zerologger,
 		funcCtxFields: nil,
 	}
 }
 
-// Debug implements log.Interface.
+// Debug logs a debug message to a file.
+// It takes a context and an object to log, and includes caller information.
 func (f *fileImpl) Debug(ctx context.Context, obj interface{}) {
 	f.log.Debug().
 		Fields(f.getContextFields(ctx)).
 		Msg(fmt.Sprint(GetCaller(obj)))
 }
 
-// Error implements log.Interface.
+// Error logs an error message to a file.
+// It takes a context and an object to log, and includes caller information.
 func (f *fileImpl) Error(ctx context.Context, obj interface{}) {
 	f.log.Error().
 		Fields(f.getContextFields(ctx)).
 		Msg(fmt.Sprint(GetCaller(obj)))
 }
 
-// Fatal implements log.Interface.
+// Fatal logs a fatal message to a file, then exits the application.
+// It takes a context and an object to log, and includes caller information.
 func (f *fileImpl) Fatal(ctx context.Context, obj interface{}) {
 	f.log.Fatal().
 		Fields(f.getContextFields(ctx)).
 		Msg(fmt.Sprint(GetCaller(obj)))
 }
 
-// Info implements log.Interface.
+// Info logs an info message to a file.
+// It takes a context and an object to log, and includes caller information.
 func (f *fileImpl) Info(ctx context.Context, obj interface{}) {
 	f.log.Info().
 		Fields(f.getContextFields(ctx)).
 		Msg(fmt.Sprint(GetCaller(obj)))
 }
 
-// Trace implements log.Interface.
+// Trace logs a trace message to a file.
+// It takes a context and an object to log, and includes caller information.
 func (f *fileImpl) Trace(ctx context.Context, obj interface{}) {
 	f.log.Trace().
 		Fields(f.getContextFields(ctx)).
 		Msg(fmt.Sprint(GetCaller(obj)))
 }
 
-// Warn implements log.Interface.
+// Warn logs a warning message to a file.
+// It takes a context and an object to log, and includes caller information.
 func (f *fileImpl) Warn(ctx context.Context, obj interface{}) {
 	f.log.Warn().
 		Fields(f.getContextFields(ctx)).
@@ -96,7 +104,9 @@ func (f *fileImpl) WithCtxFields(funcCtxField func(ctx context.Context) map[stri
 	return f
 }
 
-func (c *fileImpl) getContextFields(ctx context.Context) map[string]any {
+// getContextFields returns a map of fields extracted from the context for logging.
+// It includes request_id, user_agent, service_version, and time_elapsed.
+func (f *fileImpl) getContextFields(ctx context.Context) map[string]any {
 	reqStartTime := appcontext.GetRequestStartTime(ctx)
 	timeElapsed := "0ms"
 
@@ -104,8 +114,8 @@ func (c *fileImpl) getContextFields(ctx context.Context) map[string]any {
 		timeElapsed = fmt.Sprintf("%dms", uint64(time.Since(reqStartTime)/time.Millisecond))
 	}
 
-	if c.funcCtxFields != nil {
-		return c.funcCtxFields(ctx)
+	if f.funcCtxFields != nil {
+		return f.funcCtxFields(ctx)
 	}
 
 	return map[string]any{

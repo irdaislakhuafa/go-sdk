@@ -8,8 +8,8 @@ import (
 	"github.com/rs/zerolog"
 )
 
+// Interface defines the methods that a logger must implement.
 type Interface interface {
-	// TODO: added method Debugf
 	Trace(ctx context.Context, obj interface{})
 	Debug(ctx context.Context, obj interface{})
 	Info(ctx context.Context, obj interface{})
@@ -19,22 +19,25 @@ type Interface interface {
 	WithCtxFields(funcCtxField func(ctx context.Context) map[string]any) Interface
 }
 
-type (
-	Config struct {
-		Level          LEVEL
-		SkipFrameCount int
-		Storage        StorageOpt
-	}
-	logger struct {
-		log           zerolog.Logger
-		funcCtxFields func(ctx context.Context) map[string]any
-	}
-)
+// Config holds the configuration for the logger.
+type Config struct {
+	Level          LEVEL
+	SkipFrameCount int
+	Storage        StorageOpt
+}
+
+// logger is an internal struct that holds the zerolog logger and context fields function.
+type logger struct {
+	log           zerolog.Logger
+	funcCtxFields func(ctx context.Context) map[string]any
+}
 
 const (
 	DEFAULT_SKIP_FRAME_COUNT = 3 // NOTE: temporary 3 for now
 )
 
+// Init initializes a new logger based on the provided configuration.
+// It returns an Interface that logs to either console or file, depending on the config.
 func Init(cfg Config) Interface {
 	cfg.ParseDefault()
 
@@ -48,6 +51,10 @@ func Init(cfg Config) Interface {
 	}
 }
 
+// GetCaller extracts caller information from an error or returns the input as is.
+// If the value is an error, it returns a formatted string with file, line, and message.
+// If the value is a string, it returns the string as is.
+// Otherwise, it returns the value formatted as a Go syntax representation.
 func GetCaller(value any) any {
 	switch tErr := value.(type) {
 	case error:
@@ -63,6 +70,8 @@ func GetCaller(value any) any {
 	}
 }
 
+// ParseDefault sets default values for the logger configuration if not already set.
+// It sets the driver to CONSOLE if empty, skip frame count to default, and file location for file driver.
 func (cfg *Config) ParseDefault() {
 	if cfg.Storage.Driver == "" {
 		cfg.Storage.Driver = STORAGE_DRIVER_CONSOLE

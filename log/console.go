@@ -21,6 +21,8 @@ type (
 	}
 )
 
+// InitConsole initializes a new console logger with the given configuration.
+// It returns an Interface that logs to the console (stdout).
 func InitConsole(cfg Config) Interface {
 	var zerologger zerolog.Logger
 	once.Do(func() {
@@ -43,42 +45,48 @@ func InitConsole(cfg Config) Interface {
 	}
 }
 
-// Debug implements log.Interface.
+// Debug logs a debug message to the console.
+// It takes a context and an object to log, and includes caller information.
 func (c *consoleImpl) Debug(ctx context.Context, obj interface{}) {
 	c.log.Debug().
 		Fields(c.getContextFields(ctx)).
 		Msg(fmt.Sprint(GetCaller(obj)))
 }
 
-// Error implements log.Interface.
+// Error logs an error message to the console.
+// It takes a context and an object to log, and includes caller information.
 func (c *consoleImpl) Error(ctx context.Context, obj interface{}) {
 	c.log.Error().
 		Fields(c.getContextFields(ctx)).
 		Msg(fmt.Sprint(GetCaller(obj)))
 }
 
-// Fatal implements log.Interface.
+// Fatal logs a fatal message to the console, then exits the application.
+// It takes a context and an object to log, and includes caller information.
 func (c *consoleImpl) Fatal(ctx context.Context, obj interface{}) {
 	c.log.Fatal().
 		Fields(c.getContextFields(ctx)).
 		Msg(fmt.Sprint(GetCaller(obj)))
 }
 
-// Info implements log.Interface.
+// Info logs an info message to the console.
+// It takes a context and an object to log, and includes caller information.
 func (c *consoleImpl) Info(ctx context.Context, obj interface{}) {
 	c.log.Info().
 		Fields(c.getContextFields(ctx)).
 		Msg(fmt.Sprint(GetCaller(obj)))
 }
 
-// Trace implements log.Interface.
+// Trace logs a trace message to the console.
+// It takes a context and an object to log, and includes caller information.
 func (c *consoleImpl) Trace(ctx context.Context, obj interface{}) {
 	c.log.Trace().
 		Fields(c.getContextFields(ctx)).
 		Msg(fmt.Sprint(GetCaller(obj)))
 }
 
-// Warn implements log.Interface.
+// Warn logs a warning message to the console.
+// It takes a context and an object to log, and includes caller information.
 func (c *consoleImpl) Warn(ctx context.Context, obj interface{}) {
 	c.log.Warn().
 		Fields(c.getContextFields(ctx)).

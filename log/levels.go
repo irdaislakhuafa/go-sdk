@@ -1,23 +1,22 @@
 package log
 
-type (
-	LEVEL string
-)
+// LEVEL represents a log level as a string.
+type LEVEL string
 
 // Reference: github.com/rs/zerolog
 var (
-	// LevelTraceValue is the value used for the trace level field.
+	// LEVEL_TRACE_VALUE is the string representation for the trace log level.
 	LEVEL_TRACE_VALUE = LEVEL("trace")
-	// LevelDebugValue is the value used for the debug level field.
+	// LEVEL_DEBUG_VALUE is the string representation for the debug log level.
 	LEVEL_DEBUG_VALUE = LEVEL("debug")
-	// LevelInfoValue is the value used for the info level field.
+	// LEVEL_INFO_VALUE is the string representation for the info log level.
 	LEVEL_INFO_VALUE = LEVEL("info")
-	// LevelWarnValue is the value used for the warn level field.
+	// LEVEL_WARN_VALUE is the string representation for the warn log level.
 	LEVEL_WARN_VALUE = LEVEL("warn")
-	// LevelErrorValue is the value used for the error level field.
+	// LEVEL_ERROR_VALUE is the string representation for the error log level.
 	LEVEL_ERROR_VALUE = LEVEL("error")
-	// LevelFatalValue is the value used for the fatal level field.
+	// LEVEL_FATAL_VALUE is the string representation for the fatal log level.
 	LEVEL_FATAL_VALUE = LEVEL("fatal")
-	// LevelPanicValue is the value used for the panic level field.
+	// LEVEL_PANIC_VALUE is the string representation for the panic log level.
 	LEVEL_PANIC_VALUE = LEVEL("panic")
 )
