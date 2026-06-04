@@ -40,11 +40,11 @@ func InitFile(cfg Config) Interface {
 
 		if cfg.Storage.Rotation.Enable {
 			file := &lumberjack.Logger{
-				Filename:   cfg.Storage.FileLocation, // Log file path
-				MaxSize:    30,                       // Megabytes before rolling
-				MaxBackups: 3,                        // Maximum number of old log files to retain
-				MaxAge:     30,                       // Maximum number of days to retain old log files
-				Compress:   true,                     // Compress old log files (gzip)
+				Filename:   cfg.Storage.FileLocation,        // Log file path
+				MaxSize:    cfg.Storage.Rotation.MaxSize,    // Megabytes before rolling
+				MaxBackups: cfg.Storage.Rotation.MaxBackups, // Maximum number of old log files to retain
+				MaxAge:     cfg.Storage.Rotation.MaxAge,     // Maximum number of days to retain old log files
+				Compress:   cfg.Storage.Rotation.Compress,   // Compress old log files (gzip)
 			}
 			fileLog = file
 			cleanup = func(ctx context.Context) {

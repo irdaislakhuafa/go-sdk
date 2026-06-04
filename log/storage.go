@@ -9,6 +9,7 @@ type StorageOpt struct {
 
 // StorageRotation holds options for log file rotation.
 type StorageRotation struct {
+	// Enable storage rotation, if disabled then other options on storage rotation will be ignored.
 	Enable bool
 }
 
