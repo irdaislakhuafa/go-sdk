@@ -35,6 +35,10 @@ type logger struct {
 
 const (
 	DEFAULT_SKIP_FRAME_COUNT = 3 // NOTE: temporary 3 for now
+	DEFAULT_MAX_AGE          = 30
+	DEFAULT_MAX_BACKUPS      = 3
+	DEFAULT_MAX_SIZE         = 30
+	DEFAULT_FILE_LOCATION    = "logs/current.json"
 )
 
 // Init initializes a new logger based on the provided configuration.
@@ -84,7 +88,19 @@ func (cfg *Config) ParseDefault() {
 
 	if cfg.Storage.Driver == STORAGE_DRIVER_FILE {
 		if cfg.Storage.FileLocation == "" {
-			cfg.Storage.FileLocation = "logs/log.json"
+			cfg.Storage.FileLocation = DEFAULT_FILE_LOCATION
+		}
+
+		if cfg.Storage.Rotation.Enable {
+			if cfg.Storage.Rotation.MaxAge == 0 {
+				cfg.Storage.Rotation.MaxAge = DEFAULT_MAX_AGE
+			}
+			if cfg.Storage.Rotation.MaxSize == 0 {
+				cfg.Storage.Rotation.MaxSize = DEFAULT_MAX_SIZE
+			}
+			if cfg.Storage.Rotation.MaxBackups == 0 {
+				cfg.Storage.Rotation.MaxBackups = DEFAULT_MAX_BACKUPS
+			}
 		}
 	}
 }
