@@ -162,5 +162,5 @@ func (f *fileImpl) getContextFields(ctx context.Context) map[string]any {
 
 // Cleanup implements Interface.
 func (f *fileImpl) Cleanup(ctx context.Context) {
-	cleanup(ctx)
+	f.cleanup(ctx)
 }
