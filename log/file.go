@@ -21,7 +21,7 @@ type (
 	fileImpl struct {
 		log           zerolog.Logger
 		funcCtxFields func(ctx context.Context) map[string]any
-		fileLog       io.Writer
+		cleanup       func(ctx context.Context)
 	}
 )
 
@@ -30,6 +30,8 @@ type (
 func InitFile(cfg Config) Interface {
 	var zerologger zerolog.Logger
 	var fileLog io.Writer
+	var cleanup func(ctx context.Context) = func(ctx context.Context) {}
+
 	onceFile.Do(func() {
 		level, err := zerolog.ParseLevel(string(cfg.Level))
 		if err != nil {
@@ -76,13 +78,11 @@ func InitFile(cfg Config) Interface {
 	result := &fileImpl{
 		log:           zerologger,
 		funcCtxFields: nil,
-		fileLog:       fileLog,
+		cleanup:       cleanup,
 	}
 
 	return result
 }
-
-var cleanup func(ctx context.Context) = func(ctx context.Context) {}
 
 // Debug logs a debug message to a file.
 // It takes a context and an object to log, and includes caller information.
