@@ -37,7 +37,7 @@ const (
 	DEFAULT_SKIP_FRAME_COUNT = 3 // NOTE: temporary 3 for now
 	DEFAULT_MAX_AGE          = 30
 	DEFAULT_MAX_BACKUPS      = 3
-	DEFAULT_MAX_SIZE         = 30
+	DEFAULT_MAX_SIZE         = 100
 	DEFAULT_FILE_LOCATION    = "logs/current.json"
 )
 
