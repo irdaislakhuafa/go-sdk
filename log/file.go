@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"sync"
 	"time"
 
 	"github.com/irdaislakhuafa/go-sdk/appcontext"
@@ -13,6 +14,8 @@ import (
 	zlog "github.com/rs/zerolog/log"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
+
+var onceFile sync.Once = sync.Once{}
 
 type (
 	fileImpl struct {
@@ -27,23 +30,27 @@ type (
 func InitFile(cfg Config) Interface {
 	var zerologger zerolog.Logger
 	var fileLog io.Writer
-	once.Do(func() {
+	onceFile.Do(func() {
 		level, err := zerolog.ParseLevel(string(cfg.Level))
 		if err != nil {
 			zlog.Fatal().Msg(fmt.Sprintf("failed to parse log level from config with err: %v", err))
 		}
 
 		if cfg.Storage.Rotation.Enable {
-			fileLog = &lumberjack.Logger{
+			file := &lumberjack.Logger{
 				Filename:   cfg.Storage.FileLocation, // Log file path
 				MaxSize:    30,                       // Megabytes before rolling
 				MaxBackups: 3,                        // Maximum number of old log files to retain
 				MaxAge:     30,                       // Maximum number of days to retain old log files
 				Compress:   true,                     // Compress old log files (gzip)
 			}
+			fileLog = file
+			cleanup = func(ctx context.Context) {
+				file.Close()
+			}
 		} else {
 			dir := filepath.Dir(cfg.Storage.FileLocation)
-			if err := os.MkdirAll(dir, 0777); err != nil {
+			if err := os.MkdirAll(dir, 0755); err != nil {
 				zlog.Fatal().Msg(fmt.Sprintf("failed to make dir '%v', %v", dir, err))
 			}
 

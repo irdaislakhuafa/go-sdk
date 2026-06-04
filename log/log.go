@@ -83,6 +83,8 @@ func (cfg *Config) ParseDefault() {
 	}
 
 	if cfg.Storage.Driver == STORAGE_DRIVER_FILE {
-		cfg.Storage.FileLocation = "logs/log.json"
+		if cfg.Storage.FileLocation == "" {
+			cfg.Storage.FileLocation = "logs/log.json"
+		}
 	}
 }
