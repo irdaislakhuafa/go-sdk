@@ -1,7 +1,5 @@
 package log
 
-import "context"
-
 // StorageOpt holds options for log storage.
 type StorageOpt struct {
 	Driver       StorageDriver
@@ -11,8 +9,7 @@ type StorageOpt struct {
 
 // StorageRotation holds options for log file rotation.
 type StorageRotation struct {
-	Enable     bool
-	FileFormat func(ctx context.Context, cfg Config) string
+	Enable bool
 }
 
 // StorageDriver represents the type of storage driver for logs.

@@ -12,7 +12,7 @@ import (
 	zlog "github.com/rs/zerolog/log"
 )
 
-var once sync.Once = sync.Once{}
+var onceConsole sync.Once = sync.Once{}
 
 type (
 	consoleImpl struct {
@@ -25,7 +25,7 @@ type (
 // It returns an Interface that logs to the console (stdout).
 func InitConsole(cfg Config) Interface {
 	var zerologger zerolog.Logger
-	once.Do(func() {
+	onceConsole.Do(func() {
 		level, err := zerolog.ParseLevel(string(cfg.Level))
 		if err != nil {
 			zlog.Fatal().Msg(fmt.Sprintf("failed to parse log level from config with err: %v", err))
