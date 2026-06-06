@@ -181,6 +181,13 @@ const (
 	CodeCacheEnd
 	// Other codes
 
+	// Rate limiter codes
+	CodeRateLimiterStart
+	CodeRateLimiterRead
+	CodeRateLimiterExceeded
+	CodeRateLimiterResetFailed
+	CodeRateLimiterEnd
+
 	// end of sdk code
 	CodeEnd
 )
