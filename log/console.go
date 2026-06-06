@@ -18,6 +18,7 @@ type (
 	consoleImpl struct {
 		log           zerolog.Logger
 		funcCtxFields func(ctx context.Context) map[string]any
+		isMerge       bool
 	}
 )
 
@@ -107,19 +108,35 @@ func (c *consoleImpl) getContextFields(ctx context.Context) map[string]any {
 		timeElapsed = fmt.Sprintf("%dms", uint64(time.Since(reqStartTime)/time.Millisecond))
 	}
 
-	if c.funcCtxFields != nil {
-		return c.funcCtxFields(ctx)
-	}
-
-	return map[string]any{
+	base := map[string]any{
 		"request_id":      appcontext.GetRequestID(ctx),
 		"user_agent":      appcontext.GetUserAgent(ctx),
 		"service_version": appcontext.GetServiceVersion(ctx),
 		"time_elapsed":    timeElapsed,
 	}
+
+	if c.funcCtxFields != nil {
+		custom := c.funcCtxFields(ctx)
+		if c.isMerge {
+			for k, v := range custom {
+				base[k] = v
+			}
+			return base
+		}
+
+		return custom
+	}
+
+	return base
 }
 
 // Cleanup implements Interface.
 func (c *consoleImpl) Cleanup(ctx context.Context) {
 	// do nothing because it's show on console
+}
+
+// MergedFields implements Interface.
+func (c *consoleImpl) MergedFields(ctx context.Context) Interface {
+	c.isMerge = true
+	return c
 }

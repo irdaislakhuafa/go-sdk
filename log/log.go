@@ -17,6 +17,7 @@ type Interface interface {
 	Error(ctx context.Context, obj interface{})
 	Fatal(ctx context.Context, obj interface{})
 	WithCtxFields(funcCtxField func(ctx context.Context) map[string]any) Interface
+	MergedFields(ctx context.Context) Interface
 	Cleanup(ctx context.Context)
 }
 
