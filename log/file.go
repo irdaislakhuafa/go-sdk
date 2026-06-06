@@ -22,6 +22,7 @@ type (
 		log           zerolog.Logger
 		funcCtxFields func(ctx context.Context) map[string]any
 		cleanup       func(ctx context.Context)
+		isMerge       bool
 	}
 )
 
@@ -148,19 +149,35 @@ func (f *fileImpl) getContextFields(ctx context.Context) map[string]any {
 		timeElapsed = fmt.Sprintf("%dms", uint64(time.Since(reqStartTime)/time.Millisecond))
 	}
 
-	if f.funcCtxFields != nil {
-		return f.funcCtxFields(ctx)
-	}
-
-	return map[string]any{
+	base := map[string]any{
 		"request_id":      appcontext.GetRequestID(ctx),
 		"user_agent":      appcontext.GetUserAgent(ctx),
 		"service_version": appcontext.GetServiceVersion(ctx),
 		"time_elapsed":    timeElapsed,
 	}
+
+	if f.funcCtxFields != nil {
+		custom := f.funcCtxFields(ctx)
+		if f.isMerge {
+			for k, v := range custom {
+				base[k] = v
+			}
+			return base
+		}
+
+		return custom
+	}
+
+	return base
 }
 
 // Cleanup implements Interface.
 func (f *fileImpl) Cleanup(ctx context.Context) {
 	f.cleanup(ctx)
+}
+
+// MergedFields implements Interface.
+func (f *fileImpl) MergedFields(ctx context.Context) Interface {
+	f.isMerge = true
+	return f
 }
