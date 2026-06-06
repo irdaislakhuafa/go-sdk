@@ -65,10 +65,7 @@ func InitMinio(cfg Config) (Interface, error) {
 }
 
 func (m *minioimpl) Put(ctx context.Context, params PutParams) (PutResult, error) {
-	if params.DirName[len(params.DirName):] == "" {
-		params.DirName = params.DirName + "/"
-	}
-
+	params.DirName = NormalizeDir(params.DirName)
 	clientRes, err := m.client.PutObject(ctx, m.cfg.BaseDir, fmt.Sprintf("%s%s", params.DirName, params.FileName), params.FileBuffer, params.FileSize, minio.PutObjectOptions{
 		ContentType:     params.ContentType,
 		ContentEncoding: params.ContentEncoding,

@@ -12,10 +12,15 @@ import (
 type StorageType string
 
 const (
+	// TypeMinio represents the MinIO storage type.
 	TypeMinio = StorageType("minio")
-	TypeDisk  = StorageType("disk")
+	// TypeDisk represents the local disk storage type.
+	TypeDisk = StorageType("disk")
+	// TypeDummy represents the dummy storage type used for testing.
+	TypeDummy = StorageType("dummy")
 )
 
+//go:generate mockgen -source=storage.go -destination=storage_mock.go -package=storage
 type (
 	Interface interface {
 		// Put a file to storage.
@@ -113,6 +118,8 @@ func Init(cfg Config) (Interface, error) {
 	switch cfg.StorageType {
 	case TypeMinio:
 		return InitMinio(cfg)
+	case TypeDummy:
+		return InitDummy(cfg)
 	case TypeDisk:
 		// TODO: implement file operation on disk
 		fallthrough
