@@ -2,6 +2,7 @@ package storage
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"mime/multipart"
 
@@ -50,4 +51,29 @@ func NormalizeDir(dir string) string {
 		dir = dir + "/"
 	}
 	return dir
+}
+
+func FormatBytes(bytes uint64) string {
+	units := []string{"B", "KB", "MB", "GB", "TB", "PB"}
+	if bytes < 1024 {
+		return fmt.Sprintf("%.2f B", float64(bytes))
+	}
+
+	value := float64(bytes)
+	unitIdx := 0
+
+	for value >= 1024 && unitIdx < len(units)-1 {
+		value /= 1024
+		unitIdx++
+	}
+
+	return fmt.Sprintf("%.2f %v", value, units[unitIdx])
+}
+
+func PercentBytes(used, total uint64) float64 {
+	if total <= 0 {
+		return 100
+	}
+
+	return (float64(used) / float64(total)) * 100
 }
