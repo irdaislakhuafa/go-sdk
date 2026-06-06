@@ -16,6 +16,7 @@ const (
 	TypeDisk  = StorageType("disk")
 )
 
+//go:generate mockgen -source=storage.go -destination=storage_mock.go -package=storage
 type (
 	Interface interface {
 		// Put a file to storage.
