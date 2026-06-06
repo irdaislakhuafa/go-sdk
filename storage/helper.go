@@ -44,3 +44,10 @@ func NewPutParamsFromMultipart(dir string, params multipart.FileHeader) (PutPara
 	}
 	return result, nil
 }
+
+func NormalizeDir(dir string) string {
+	if dir[len(dir):] == "" {
+		dir = dir + "/"
+	}
+	return dir
+}
