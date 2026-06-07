@@ -22,6 +22,7 @@ const (
 	MsgCodeErrContextTimeout
 	MsgCodeErrConflict
 	MsgCodeErrTooManyRequest
+	MsgCodeErrRequestEntityTooLarge
 
 	// 5xx
 	MsgCodeErrInternalServerError
@@ -175,6 +176,18 @@ var (
 				StatusCode: http.StatusTooManyRequests,
 				Title:      language.HTTPStatusText(language.Indonesian, http.StatusTooManyRequests),
 				Body:       "Terlalu banyak permintaan. Mohon tunggu dan coba lagi setelah beberapa saat.",
+			},
+		},
+		MsgCodeErrRequestEntityTooLarge: {
+			language.English: Message{
+				StatusCode: http.StatusRequestEntityTooLarge,
+				Title:      language.HTTPStatusText(language.English, http.StatusRequestEntityTooLarge),
+				Body:       "Your request entity too large. Please validate your input or contact the administrator.",
+			},
+			language.Indonesian: Message{
+				StatusCode: http.StatusRequestEntityTooLarge,
+				Title:      language.HTTPStatusText(language.Indonesian, http.StatusRequestEntityTooLarge),
+				Body:       "Entitas permintaan Anda terlalu besar. Harap validasi input Anda atau hubungi administrator.",
 			},
 		},
 
