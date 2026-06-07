@@ -32,6 +32,17 @@ func Test_Compile(t *testing.T) {
 			args:       args{code: CodeSuccess, lang: language.Indonesian},
 			wantResult: Message{StatusCode: http.StatusOK, Title: "OK", Body: "Request berhasil"},
 		},
+		{
+			name:       "test too many request in indonesian language",
+			args:       args{code: CodeTooManyRequest, lang: language.Indonesian},
+			wantResult: Message{StatusCode: http.StatusTooManyRequests, Title: "Too Many Requests", Body: "Terlalu banyak permintaan. Mohon tunggu dan coba lagi setelah beberapa saat."},
+		},
+
+		{
+			name:       "test request entity too large in indonesian language",
+			args:       args{code: CodeRequestEntityTooLarge, lang: language.Indonesian},
+			wantResult: Message{StatusCode: http.StatusRequestEntityTooLarge, Title: "Payload Terlalu Besar", Body: "Entitas permintaan Anda terlalu besar. Harap validasi input Anda atau hubungi administrator."},
+		},
 	}
 
 	for _, tt := range tests {

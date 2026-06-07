@@ -206,6 +206,7 @@ var codeMessages = map[Code](map[language.Language]Message){
 	CodeConflict:                getMessages(MsgCodeErrConflict),
 	CodeUnauthorized:            getMessages(MsgCodeErrUnauthorized),
 	CodeTooManyRequest:          getMessages(MsgCodeErrTooManyRequest),
+	CodeRequestEntityTooLarge:   getMessages(MsgCodeErrRequestEntityTooLarge),
 	CodeMarshal:                 getMessages(MsgCodeErrBadRequest),
 	CodeUnmarshal:               getMessages(MsgCodeErrBadRequest),
 	CodeJSONMarshalError:        getMessages(MsgCodeErrBadRequest),
