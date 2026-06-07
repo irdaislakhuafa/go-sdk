@@ -33,7 +33,7 @@ func (d *dummyImpl) Put(ctx context.Context, params PutParams) (PutResult, error
 	result := PutResult{
 		DirName:  params.DirName,
 		FileName: params.FileName,
-		FullPath: params.DirName,
+		FullPath: params.DirName + params.FileName,
 		Region:   string(TypeDummy),
 		Tag:      string(TypeDummy),
 		Size:     params.FileSize,
