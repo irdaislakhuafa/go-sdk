@@ -32,6 +32,7 @@ const (
 	CodeConflict
 	CodeUnauthorized
 	CodeTooManyRequest
+	CodeRequestEntityTooLarge
 	CodeMarshal
 	CodeUnmarshal
 	CodeCommonEnd
