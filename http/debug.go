@@ -29,7 +29,7 @@ func ConvertToCurl(ctx context.Context, req http.Request) (string, error) {
 		return "", errors.NewWithCode(codes.CodeClientErrorOnReadBody, "%s", err.Error())
 	}
 
-	curl.WriteString(fmt.Sprintf("--data '%s' \\\n", string(bodyBytes)))
+	curl.WriteString(fmt.Sprintf("--data '%s' ", string(bodyBytes)))
 
 	return curl.String(), nil
 }
