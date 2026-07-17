@@ -18,6 +18,9 @@ func ConvertToCurl(ctx context.Context, req http.Request) (string, error) {
 	// convert method
 	curl.WriteString(fmt.Sprintf("--method '%s' \\\n", req.Method))
 
+	// convert url
+	curl.WriteString(fmt.Sprintf("--url '%v' \\\n", req.URL.String()))
+
 	// convert headers
 	for k, v := range req.Header.Clone() {
 		curl.WriteString(fmt.Sprintf("--header '%s: %s' \\\n", k, strings.Join(v, ",")))
