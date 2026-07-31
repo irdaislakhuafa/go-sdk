@@ -16,7 +16,7 @@ func ConvertToCurl(ctx context.Context, req http.Request) (string, error) {
 	curl.WriteString("curl \\\n")
 
 	// convert method
-	curl.WriteString(fmt.Sprintf("--method '%s' \\\n", req.Method))
+	curl.WriteString(fmt.Sprintf("--request '%s' \\\n", req.Method))
 
 	// convert url
 	curl.WriteString(fmt.Sprintf("--url '%v' \\\n", req.URL.String()))
