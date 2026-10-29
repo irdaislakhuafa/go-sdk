@@ -54,7 +54,7 @@ func TestConvertToCurl(t *testing.T) {
 			want: want{
 				wantCode: codes.NoCode,
 				contains: []string{
-					"--method 'GET'",
+					"--request 'GET'",
 					"--data ''",
 				},
 			},
@@ -62,7 +62,7 @@ func TestConvertToCurl(t *testing.T) {
 			fnAfter:  func(test *test) {},
 		},
 		{
-			name: "POST with header and body success",
+			name: "POST with header, body, and single quotes success",
 			args: args{
 				req: http.Request{
 					Method: http.MethodPost,
@@ -70,15 +70,15 @@ func TestConvertToCurl(t *testing.T) {
 					Header: http.Header{
 						header.KeyContentType: {header.ContentTypeJSON},
 					},
-					Body: io.NopCloser(strings.NewReader(`{"a":1}`)),
+					Body: io.NopCloser(strings.NewReader(`{"message": "it's working"}`)),
 				},
 			},
 			want: want{
 				wantCode: codes.NoCode,
 				contains: []string{
-					"--method 'POST'",
+					"--request 'POST'",
 					"--header '" + header.KeyContentType + ": " + header.ContentTypeJSON + "'",
-					"--data '{\"a\":1}'",
+					`--data '{"message": "it'\''s working"}'`,
 				},
 			},
 			fnBefore: func(test *test) {},
