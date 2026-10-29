@@ -1,45 +1,134 @@
 # Go Software Development Kit
 
-This is my code collection for development with Go Programming Language.
-Here are some packages that i often use for developing Golang projects.
+A comprehensive collection of production-ready utility packages and helpers designed to simplify Go application development, reduce boilerplate, and enforce robust patterns.
 
-- [appcontext](./appcontext/): Provides utilities for managing request-scoped data within a Go application's context, simplifying data sharing and retrieval across different parts of the request lifecycle.
-- [auth](./auth/)
-    - [jwt](./auth/jwt.go): Effortless JWT Generation, Validation, and Claims Extraction
-- [codes](./codes/): A package for defining and handling custom error codes in Go applications, enabling streamlined error management and identification.
-- [collections](./collections/)
-    - [slice](./collections/slice.go): Provides utility functions for manipulating and comparing slices, simplifying common slice operations.
-- [concurrency](./concurrency/)
-    - [concurrency](./concurrency/concurrency.go): A package for running asynchronous functions in Go with controlled goroutine limits, preventing memory leaks caused by uncontrolled goroutine execution. It simplifies concurrent task management and ensures efficient resource utilization.
-- [convert](./convert/)
-    - [ptr](./convert/ptr.go): Provides utilities for working with pointers, including type-safe value extraction without nil checks and direct conversion of function return values to pointers. This simplifies pointer handling and reduces boilerplate code.
-- [cryptography](./cryptography/)
-    - [aes256gcm](./cryptography/aes256gcm.go): Provides functions for encrypting and decrypting data using the AES-256-GCM algorithm. This package simplifies the usage of AES-256-GCM in Go applications for secure data protection.
-    - [argon2](./cryptography/argon2.go): Argon2 implementation in Go with a standard format compatible with [node-argon2](https://github.com/ranisalt/node-argon2), ensuring interoperability between Go and Node.js applications.
-    - [bcrypt](./cryptography/bcrypt.go): Provides a simplified interface for bcrypt hashing using a builder pattern, making it easier to generate and verify bcrypt hashes securely.
-    - [sha256](./cryptography/sha256.go): Simplifies generating SHA256 hashes with or without a key, providing a convenient interface for incorporating SHA256 hashing into your Go applications.
-- [datastructure](./datastructure/)
-    - [set](./datastructure/set.go): Provides a hash set implementation in Go, utilizing a map for efficient storage and retrieval of unique elements. This package simplifies working with sets of data and ensures element uniqueness.
-    - [queue](./datastructure/queue.go): Provides a basic FIFO (First-In, First-Out) queue implementation in Go, enabling the management of ordered data with enqueue and dequeue operations.
-- [errors](./errors/): Provides utilities for generating and handling errors with custom error codes defined in the `codes` package. This enables efficient error identification and allows for implementing different logic based on specific error types.
-- [files](./files/): Provides utilities for managing local files, such as checking file existence, getting file extensions, and performing other file-related operations.
-- [header](./header/): Offers functions for manipulating and extracting information from HTTP headers, streamlining common header-related tasks in Go applications.
-- [language](./language/): Provides support for managing multi-language messages within your Go application, enabling easy localization and internationalization.
-- [log](./log/): A simplified logging wrapper around the [zerolog](https://github.com/rs/zerolog.git) package. It provides convenient functions for retrieving values from the context, adding custom fields, and logging messages with various levels.
-- [operator](./operator/): Provides implementations of common logical operators, including a ternary operator, to enhance code readability and conciseness in Go applications.
-- [smtp](./smtp/): Provides a simplified interface for sending emails using SMTP, acting as a wrapper around the [gomail](https://github.com/go-mail/gomail.git) library. It simplifies email sending tasks and offers convenient configuration options.
-- [sorter](./sorter/): Provides a generic sorting function that works with any type implementing the `sort.Interface` interface, making it easy to sort slices of custom data structures.
-- [strformat](./strformat/): Provides a string formatting utility similar to JavaScript's template literals, but for Go. It leverages the `text/template` package from the Go standard library to enable dynamic string generation with placeholders and expressions.
+## Table of Contents
 
-## Documentations
+- [Packages](#packages)
+  - [appcontext](#appcontext)
+  - [auth](#auth)
+  - [caches](#caches)
+  - [codes](#codes)
+  - [collections](#collections)
+  - [concurrency](#concurrency)
+  - [convert](#convert)
+  - [cryptography](#cryptography)
+  - [datastructure](#datastructure)
+  - [db](#db)
+  - [errors](#errors)
+  - [files](#files)
+  - [header](#header)
+  - [http](#http)
+  - [language](#language)
+  - [log](#log)
+  - [operator](#operator)
+  - [querybuilder/sqlc](#querybuildersqlc)
+  - [random](#random)
+  - [smtp](#smtp)
+  - [sorter](#sorter)
+  - [storage](#storage)
+  - [strformat](#strformat)
+- [Documentation](#documentation)
+- [Installation](#installation)
 
-You can read full documentations [here](https://pkg.go.dev/github.com/irdaislakhuafa/go-sdk)
+## Packages
 
-## How to install
+### [appcontext](./appcontext/)
+Provides utilities for managing request-scoped data within context objects, simplifying sharing and retrieval of lifecycle data across application layers.
+
+### [auth](./auth/)
+Authentication and token management tools:
+- **jwt**: Simplifies JSON Web Token generation, validation, and claims extraction using `golang-jwt/jwt/v5`.
+
+### [caches](./caches/)
+Caching abstractions supporting multiple backend stores:
+- **memory**: In-memory thread-safe cache implementation.
+- **sqlite**: SQLite-backed persistent cache storage.
+
+### [codes](./codes/)
+Standardized custom error codes and mapping functions to streamline error classification, identification, and response formatting across services.
+
+### [collections](./collections/)
+Generic collection manipulation utilities:
+- **slice**: Operations for filtering, mapping, checking, and comparing slices.
+- **map**: Map manipulation and key-value utilities.
+- **reduce**: Functional reduction helpers for slices and iterables.
+
+### [concurrency](./concurrency/)
+Utilities for safe asynchronous execution:
+- **concurrency**: Runs asynchronous functions with controlled goroutine limits to prevent memory leaks and resource exhaustion.
+- **semaphore**: Lightweight concurrency limiting primitives.
+
+### [convert](./convert/)
+Type conversion and pointer helpers:
+- **ptr**: Utilities for working with pointers, including type-safe value extraction without nil checks and direct conversion of primitive values to pointers.
+
+### [cryptography](./cryptography/)
+Secure hashing and encryption primitives:
+- **aes256gcm**: Encrypts and decrypts data using the AES-256-GCM authenticated encryption standard.
+- **argon2**: Argon2 password hashing compatible with standard Node.js implementations for cross-language interoperability.
+- **bcrypt**: Fluent builder interface for secure password hashing and verification.
+- **sha256**: Convenient hashing utility supporting keyed and unkeyed SHA-256 generation.
+
+### [datastructure](./datastructure/)
+Common data structures implemented in generic Go:
+- **set**: Hash set implementation utilizing maps for efficient storage and retrieval of unique elements.
+- **queue**: First-In-First-Out queue management with standard enqueue and dequeue operations.
+
+### [db](./db/)
+Database connection initializers and connection managers:
+- **mysql**: MySQL connection setup using `go-sql-driver/mysql`.
+- **postgresql**: PostgreSQL connection setup using `lib/pq`.
+- **sqlite**: SQLite connection setup using `go-sqlite3`.
+
+### [errors](./errors/)
+Advanced error handling wrapper supporting custom error codes, contextual metadata, and stack trace capture for deep debugging.
+
+### [files](./files/)
+Local file management utilities including existence verification, extension extraction, and path helper functions.
+
+### [header](./header/)
+HTTP header manipulation utilities for extracting, setting, and parsing incoming and outgoing request headers.
+
+### [http](./http/)
+HTTP debugging utilities for inspecting requests, responses, and payload data during development.
+
+### [language](./language/)
+Multi-language support and internationalization messages for localizing application output.
+
+### [log](./log/)
+A structured logging wrapper around `zerolog` featuring context integration, custom field injection, and multi-destination output including file rotation (`lumberjack`) and console formatting.
+
+### [operator](./operator/)
+Logical operators including a concise ternary operator function to improve inline conditional readability.
+
+### [querybuilder/sqlc](./querybuilder/sqlc/)
+Helpers and type-safe wrappers for SQLC generated code to simplify database operations and transaction management.
+
+### [random](./random/)
+Random integer and token generation utilities.
+
+### [smtp](./smtp/)
+Simplified email sending wrapper around `gomail` supporting HTML bodies, attachments, and SMTP configuration options.
+
+### [sorter](./sorter/)
+Generic sorting functions compatible with custom data structures and custom comparators.
+
+### [storage](./storage/)
+Cloud and local object storage abstraction layer supporting:
+- **minio**: S3 compatible object storage integration via MinIO SDK.
+- **disk**: Local disk file storage operations.
+- **dummy**: Mock storage backend for unit testing.
+
+### [strformat](./strformat/)
+String formatting utility inspired by template literals, leveraging Go standard `text/template` for dynamic interpolation with placeholders.
+
+## Documentation
+
+Full package documentation and API references are available on [GoPkgDev](https://pkg.go.dev/github.com/irdaislakhuafa/go-sdk).
+
+## Installation
 
 ```bash
 go get github.com/irdaislakhuafa/go-sdk@latest
 ```
-
-## TODO
-- [ ] Implement storage file operation for type disk
